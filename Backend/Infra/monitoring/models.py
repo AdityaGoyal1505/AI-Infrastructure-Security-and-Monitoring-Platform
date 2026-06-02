@@ -1,6 +1,6 @@
 import uuid
-from django.db import models #type: ignore
-from django.contrib.auth.models import AbstractUser #type: ignore
+from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
@@ -43,11 +43,11 @@ class Workspace(models.Model):
         null=True
     )
 
-    api_key = models.CharField(
-        max_length=255,
-        unique=True,
-        editable=False
-    )
+    api_key = models.UUIDField(
+    unique=True,
+    editable=False,
+    default=uuid.uuid4
+)
 
     is_active = models.BooleanField(
         default=True
@@ -74,11 +74,116 @@ class Workspace(models.Model):
         return self.name
 
 
+class NodeStatus(models.Model):
+
+    STATUS_CHOICES = [
+        ('online', 'Online'),
+        ('offline', 'Offline'),
+        ('warning', 'Warning'),
+    ]
+
+    workspace = models.ForeignKey(
+        Workspace,
+        on_delete=models.CASCADE,
+        related_name='nodes'
+    )
+
+    node_id = models.CharField(
+        max_length=100
+    )
+
+    source_service = models.CharField(
+        max_length=100,
+        default='telemetry-agent'
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='online'
+    )
+
+    cpu_usage = models.FloatField(
+        default=0
+    )
+
+    memory_usage = models.FloatField(
+        default=0
+    )
+
+    disk_usage = models.FloatField(
+        default=0
+    )
+
+    network_usage = models.FloatField(
+        default=0
+    )
+
+    process_count = models.IntegerField(
+        default=0
+    )
+
+    agent_version = models.CharField(
+        max_length=50,
+        default='1.0.0'
+    )
+
+    last_heartbeat = models.DateTimeField()
+
+    last_seen = models.DateTimeField(
+        auto_now=True
+    )
+
+    metadata = models.JSONField(
+        default=dict,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+
+        unique_together = (
+            'workspace',
+            'node_id'
+        )
+
+        indexes = [
+
+            models.Index(
+                fields=['workspace']
+            ),
+
+            models.Index(
+                fields=['node_id']
+            ),
+
+            models.Index(
+                fields=['status']
+            ),
+
+            models.Index(
+                fields=['last_heartbeat']
+            ),
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.node_id} "
+            f"- {self.status}"
+        )
+    
 class Event(models.Model):
 
     EVENT_TYPES = [
         ('log', 'Log'),
-        ('metric', 'Metric'),
         ('incident', 'Incident'),
     ]
 
@@ -93,6 +198,11 @@ class Event(models.Model):
         Workspace,
         on_delete=models.CASCADE,
         related_name='events'
+    )
+
+    node_id = models.CharField(
+        max_length=100,
+        default='local-node'
     )
 
     source_service = models.CharField(
@@ -140,11 +250,23 @@ class Event(models.Model):
         auto_now=True
     )
 
+    event_hash = models.CharField(
+        max_length=64,
+        blank=True,
+        null=True
+    )
+    
     class Meta:
 
         ordering = ['-created_at']
 
         indexes = [
+            models.Index(
+                fields=[
+                    'workspace',
+                    'created_at'
+                ]
+            ),
 
             models.Index(
                 fields=['severity']
@@ -166,6 +288,6 @@ class Event(models.Model):
     def __str__(self):
 
         return (
-            f"{self.source_service} - "
-            f"{self.severity}"
+            f"{self.source_service} "
+            f"- {self.severity}"
         )

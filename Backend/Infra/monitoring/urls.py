@@ -1,25 +1,16 @@
-from django.urls import path #type: ignore
-from .views import register_user,create_workspace,ingest_event,health_check
+from django.urls import path
+
+from .views import EventIngestView,BatchEventIngestView
 
 urlpatterns = [
 
     path(
-        'register/',
-        register_user
+        "events/ingest/",
+        EventIngestView.as_view()
     ),
 
     path(
-        'workspaces/create/',
-        create_workspace
-    ),
-
-    path(
-        'events/ingest/',
-        ingest_event
-    ),
-
-    path(
-        'health/',
-        health_check
+        "events/batch/",
+        BatchEventIngestView.as_view()
     ),
 ]

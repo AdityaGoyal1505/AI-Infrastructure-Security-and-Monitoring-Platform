@@ -10,15 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-from pathlib import Path
-import environ #type: ignore
+import os
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from pathlib import Path
+import environ
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
+environ.Env.read_env(
+    BASE_DIR / ".env"
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -140,9 +146,24 @@ REDIS_HOST = env('REDIS_HOST')
 
 REDIS_PORT = env('REDIS_PORT')
 
-CELERY_BROKER_URL = (f'redis://{REDIS_HOST}:{REDIS_PORT}/0')
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_URL = os.getenv(
+    "REDIS_URL"
+)
+
+CELERY_RESULT_BACKEND = os.getenv(
+    "REDIS_URL"
+)
+
+CELERY_ACCEPT_CONTENT = [
+    "json"
+]
+
+CELERY_TASK_SERIALIZER = "json"
+
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_TIMEZONE = "UTC"
+
 
 REST_FRAMEWORK = {
 

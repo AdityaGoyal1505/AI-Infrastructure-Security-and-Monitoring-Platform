@@ -1,128 +1,136 @@
-from rest_framework.decorators import api_view,permission_classes #type: ignore
-from rest_framework.permissions import IsAuthenticated,AllowAny #type: ignore
-from rest_framework.response import Response #type: ignore
-from rest_framework import status #type: ignore
- 
-from .models import Workspace, Event
-from .serializers import RegisterSerializer, WorkspaceSerializer, EventSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-from .tasks import process_event
+from .models import Workspace
 
+from .tasks import process_event_task
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register_user(request):
+class EventIngestView(APIView):
 
-    serializer = RegisterSerializer(
-        data=request.data
-    )
+    authentication_classes = []
+    permission_classes = []
 
-    if serializer.is_valid():
+    def post(
+        self,
+        request
+    ):
 
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
+        api_key = request.headers.get(
+            "X-API-KEY"
         )
 
-    return Response(
-        serializer.errors,
-        status=status.HTTP_400_BAD_REQUEST
-    )
+        if not api_key:
 
+            return Response(
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def create_workspace(request):
+                {
+                    "error":
+                    "API key missing"
+                },
 
-    serializer = WorkspaceSerializer(
-        data=request.data
-    )
+                status=401
+            )
 
-    if serializer.is_valid():
+        try:
 
-        serializer.save(
-            user=request.user
+            Workspace.objects.get(
+                api_key=api_key
+            )
+
+        except Workspace.DoesNotExist:
+
+            return Response(
+
+                {
+                    "error":
+                    "Invalid API key"
+                },
+
+                status=401
+            )
+
+        payload = request.data.copy()
+
+        payload["api_key"] = api_key
+
+        process_event_task.delay(
+            payload
         )
 
         return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
 
-    return Response(
-        serializer.errors,
-        status=status.HTTP_400_BAD_REQUEST
-    )
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def ingest_event(request):
-
-    api_key = request.headers.get(
-        'X-API-KEY'
-    )
-
-    if not api_key:
-
-        return Response(
             {
-                'error': 'API key missing'
+                "status":
+                "accepted"
             },
-            status=status.HTTP_401_UNAUTHORIZED
+
+            status=202
         )
 
-    try:
 
-        workspace = Workspace.objects.get(
-            api_key=api_key,
-            is_active=True
+class BatchEventIngestView(APIView):
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(
+        self,
+        request
+    ):
+
+        api_key = request.headers.get(
+            "X-API-KEY"
         )
 
-    except Workspace.DoesNotExist:
+        if not api_key:
+
+            return Response(
+
+                {
+                    "error":
+                    "API key missing"
+                },
+
+                status=401
+            )
+
+        try:
+
+            Workspace.objects.get(
+                api_key=api_key
+            )
+
+        except Workspace.DoesNotExist:
+
+            return Response(
+
+                {
+                    "error":
+                    "Invalid API key"
+                },
+
+                status=401
+            )
+
+        events = request.data.get(
+            "events",
+            []
+        )
+
+        for event in events:
+
+            event["api_key"] = api_key
+
+            process_event_task.delay(
+                event
+            )
 
         return Response(
+
             {
-                'error': 'Invalid API key'
+                "accepted":
+                len(events)
             },
-            status=status.HTTP_401_UNAUTHORIZED
+
+            status=202
         )
-
-    serializer = EventSerializer(
-        data=request.data
-    )
-
-    if serializer.is_valid():
-
-        event = serializer.save(
-            workspace=workspace
-        )
-
-        process_event.delay(
-            event.id
-        )
-
-        return Response(
-            {
-                'message': 'Event received',
-                'event_id': event.id
-            },
-            status=status.HTTP_201_CREATED
-        )
-
-    return Response(
-        serializer.errors,
-        status=status.HTTP_400_BAD_REQUEST
-    )
-
-
-@api_view(['GET'])
-def health_check(request):
-
-    return Response(
-        {
-            'status': 'healthy'
-        }
-    )
