@@ -3,7 +3,7 @@ from watchdog.events import FileSystemEventHandler
 
 import time
 
-from parser import parse_log_line
+from parser import parse_log
 from event_queue import event_queue
 
 
@@ -42,11 +42,9 @@ class LogHandler(FileSystemEventHandler):
 
                         continue
 
-                    event = parse_log_line(
-                        line,
-                        self.service_name
-                    )
-
+                    event = parse_log(self.service_name,line)
+                    print("QUEUEING EVENT:")
+                    print(event)
                     event_queue.put(event)
 
         except Exception as error:

@@ -1,5 +1,3 @@
-# telemetry-agent/sender.py
-
 import requests
 
 
@@ -14,7 +12,7 @@ def send_batch(backend_url,api_key,events):
     }
 
     try:
-
+        print("POSTING TO:", backend_url)
         response = requests.post(
 
             backend_url,
@@ -27,7 +25,9 @@ def send_batch(backend_url,api_key,events):
 
             timeout=15
         )
-
+        print("SENDING BATCH")
+        for event in events:
+            print(event.get("event_type"))
         if response.status_code in [
 
             200,

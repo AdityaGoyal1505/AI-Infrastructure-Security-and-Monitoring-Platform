@@ -1,7 +1,6 @@
 import time
 
-from sender import send_event
-
+from sender import send_batch
 from event_queue import event_queue
 
 BATCH_SIZE = 50
@@ -26,12 +25,10 @@ def batch_sender_loop(
 
         if batch:
 
-            for event in batch:
-
-                send_batch(
-                    backend_url,
-                    api_key,
-                    batch
-                )
+            send_batch(
+                backend_url,
+                api_key,
+                batch
+            )
 
         time.sleep(2)

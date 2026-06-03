@@ -3,22 +3,13 @@ from django.utils import timezone
 from .models import Workspace,Event,NodeStatus
 
 
-def detect_severity(
-    message
-):
+def detect_severity(message):
 
     message = message.lower()
 
     if any(
-
         keyword in message
-
-        for keyword in [
-
-            "critical",
-            "fatal",
-            "panic"
-        ]
+        for keyword in ["critical","fatal","panic"]
     ):
 
         return "CRITICAL"
@@ -27,12 +18,7 @@ def detect_severity(
 
         keyword in message
 
-        for keyword in [
-
-            "error",
-            "failed",
-            "exception"
-        ]
+        for keyword in ["error","failed","exception"]
     ):
 
         return "ERROR"
@@ -41,11 +27,7 @@ def detect_severity(
 
         keyword in message
 
-        for keyword in [
-
-            "warning",
-            "warn"
-        ]
+        for keyword in ["warning","warn"]
     ):
 
         return "WARNING"
@@ -53,9 +35,7 @@ def detect_severity(
     return "INFO"
 
 
-def calculate_anomaly_score(
-    severity
-):
+def calculate_anomaly_score(severity):
 
     mapping = {
 
@@ -84,46 +64,29 @@ def extract_metadata(
     )
 
 
-def process_event(
-    event_data
-):
+def process_event(event_data):
+    print("EVENT TYPE:", event_data.get("event_type"))
+    api_key = event_data.get("api_key")
 
-    api_key = event_data.get(
-        "api_key"
-    )
+    workspace = Workspace.objects.get(api_key=api_key)
 
-    workspace = Workspace.objects.get(
-        api_key=api_key
-    )
+    event_type = event_data.get("event_type","log")
 
-    event_type = event_data.get(
-        "event_type",
-        "log"
-    )
+    node_id = event_data.get("node_id","local-node")
 
-    node_id = event_data.get(
-        "node_id",
-        "local-node"
-    )
+    source_service = event_data.get("source_service","unknown")
 
-    source_service = event_data.get(
-        "source_service",
-        "unknown"
-    )
+    metadata = event_data.get("metadata",{})
 
-    metadata = event_data.get(
-        "metadata",
-        {}
-    )
+    if event_type in ["metric","heartbeat"]:
 
-    if event_type in [
+        print("=" * 50)
+        print("EVENT TYPE:", event_data.get("event_type"))
+        print("FULL EVENT:", event_data)
+        print("=" * 50)
 
-        "metric",
-        "heartbeat"
 
-    ]:
-
-        NodeStatus.objects.update_or_create(
+        obj,created=NodeStatus.objects.update_or_create(
 
             workspace=workspace,
 
@@ -181,22 +144,18 @@ def process_event(
             }
         )
 
+        print("CREATED:", created)
+        print("NODE:", obj.id)
+
         return
 
-    message = event_data.get(
-        "message",
-        ""
-    )
+    message = event_data.get("message","")
 
-    severity = event_data.get(
-        "severity"
-    )
+    severity = event_data.get("severity")
 
     if not severity:
 
-        severity = detect_severity(
-            message
-        )
+        severity = detect_severity(message)
 
     Event.objects.create(
 
@@ -206,24 +165,15 @@ def process_event(
 
         source_service=source_service,
 
-        event_type=event_data.get(
-            "event_type",
-            "log"
-        ),
+        event_type=event_data.get("event_type","log"),
 
         severity=severity,
 
         message=message,
 
-        raw_log=event_data.get(
-            "raw_log",
-            ""
-        ),
+        raw_log=event_data.get("raw_log",""),
 
         metadata=metadata,
 
-        anomaly_score=
-        calculate_anomaly_score(
-            severity
-        )
+        anomaly_score=calculate_anomaly_score(severity)
     )

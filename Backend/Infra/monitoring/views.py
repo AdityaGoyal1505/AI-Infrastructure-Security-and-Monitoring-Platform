@@ -6,7 +6,7 @@ from .models import Workspace
 from .tasks import process_event_task
 
 class EventIngestView(APIView):
-
+# ac5b2164-c5a3-4ff8-8806-9621cc78807e
     authentication_classes = []
     permission_classes = []
 
@@ -116,15 +116,13 @@ class BatchEventIngestView(APIView):
             "events",
             []
         )
-
         for event in events:
+            print("RECEIVED EVENT")
+            print(event)
+            print("TYPE:", event.get("event_type"))
 
             event["api_key"] = api_key
-
-            process_event_task.delay(
-                event
-            )
-
+            process_event_task.delay(event)
         return Response(
 
             {

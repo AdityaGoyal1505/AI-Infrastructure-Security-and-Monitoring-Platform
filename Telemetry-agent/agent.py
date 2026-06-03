@@ -11,7 +11,7 @@ from process_monitor import collect_process_metrics
 from batch_sender import batch_sender_loop
 from event_queue import event_queue
 from config_validator import validate_config
-
+from api_watcher import start_api_monitor
 
 BASE_DIR = os.path.dirname(
     sys.executable
@@ -33,19 +33,13 @@ with open(
     "r"
 ) as config_file:
 
-    config = json.load(
-        config_file
-    )
+    config = json.load(config_file)
 
 validate_config(config)
 
-backend_url = config[
-    "backend_url"
-]
+backend_url = config["backend_url"]
 
-api_key = config[
-    "api_key"
-]
+api_key = config["api_key"]
 
 
 def metrics_loop():
@@ -54,21 +48,13 @@ def metrics_loop():
 
         try:
 
-            metrics_event = (
-                collect_system_metrics()
-            )
+            metrics_event = (collect_system_metrics())
 
-            event_queue.put(
-                metrics_event
-            )
+            event_queue.put(metrics_event)
 
-            process_event = (
-                collect_process_metrics()
-            )
+            process_event = (collect_process_metrics())
 
-            event_queue.put(
-                process_event
-            )
+            event_queue.put(process_event)
 
         except Exception as error:
 
@@ -86,13 +72,9 @@ def heartbeat_loop():
 
         try:
 
-            heartbeat = (
-                generate_heartbeat()
-            )
+            heartbeat = (generate_heartbeat())
 
-            event_queue.put(
-                heartbeat
-            )
+            event_queue.put(heartbeat)
 
         except Exception as error:
 
@@ -112,32 +94,46 @@ if __name__ == "__main__":
     )
 
     threads = []
+    if "logs" in config:
+        for log_config in config.get("logs", []):
 
-    for log_config in config["logs"]:
+            thread = threading.Thread(
 
-        thread = threading.Thread(
+                target=start_watcher,
 
-            target=start_watcher,
+                args=(
 
-            args=(
+                    log_config["service"],
 
-                log_config["service"],
+                    log_config["path"],
 
-                log_config["path"],
+                    backend_url,
 
-                backend_url,
+                    api_key
+                ),
 
-                api_key
-            ),
+                daemon=True
+            )
 
-            daemon=True
-        )
+            thread.start()
 
-        thread.start()
+            threads.append(thread)
 
-        threads.append(
-            thread
-        )
+    if "api_monitors" in config:
+        for api_config in config.get("api_monitors",[]):
+
+            thread = threading.Thread(
+
+                target=start_api_monitor,
+
+                args=(api_config,),
+
+                daemon=True
+            )
+
+            thread.start()
+
+            threads.append(thread)
 
     metrics_thread = threading.Thread(
 
@@ -161,9 +157,7 @@ if __name__ == "__main__":
 
     heartbeat_thread.start()
 
-    threads.append(
-        heartbeat_thread
-    )
+    threads.append(heartbeat_thread)
 
     batch_thread = threading.Thread(
 
@@ -181,9 +175,7 @@ if __name__ == "__main__":
 
     batch_thread.start()
 
-    threads.append(
-        batch_thread
-    )
+    threads.append(batch_thread)
 
     print(
         "[RUNNING] "

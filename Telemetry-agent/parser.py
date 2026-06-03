@@ -3,10 +3,7 @@
 from datetime import datetime
 
 
-def parse_log(
-    service_name,
-    raw_log
-):
+def parse_log(service_name,raw_log):
 
     return {
 
