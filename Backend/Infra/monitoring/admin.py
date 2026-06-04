@@ -4,10 +4,14 @@ from .models import (
     User,
     Workspace,
     Event,
-    NodeStatus
+    NodeStatus,
+    Rule,
+    RuleMatch
 )
 
+admin.site.register(Rule)
 
+admin.site.register(RuleMatch)
 admin.site.register(User)
 admin.site.register(Workspace)
 admin.site.register(Event)

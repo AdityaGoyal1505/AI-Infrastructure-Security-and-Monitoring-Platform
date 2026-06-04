@@ -11,7 +11,6 @@ from process_monitor import collect_process_metrics
 from batch_sender import batch_sender_loop
 from event_queue import event_queue
 from config_validator import validate_config
-from api_watcher import start_api_monitor
 
 BASE_DIR = os.path.dirname(
     sys.executable
@@ -111,22 +110,6 @@ if __name__ == "__main__":
 
                     api_key
                 ),
-
-                daemon=True
-            )
-
-            thread.start()
-
-            threads.append(thread)
-
-    if "api_monitors" in config:
-        for api_config in config.get("api_monitors",[]):
-
-            thread = threading.Thread(
-
-                target=start_api_monitor,
-
-                args=(api_config,),
 
                 daemon=True
             )

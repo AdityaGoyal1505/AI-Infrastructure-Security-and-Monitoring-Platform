@@ -63,9 +63,8 @@ def extract_metadata(
         {}
     )
 
-
+from .rule_evaluator import evaluate_rules
 def process_event(event_data):
-    print("EVENT TYPE:", event_data.get("event_type"))
     api_key = event_data.get("api_key")
 
     workspace = Workspace.objects.get(api_key=api_key)
@@ -80,13 +79,7 @@ def process_event(event_data):
 
     if event_type in ["metric","heartbeat"]:
 
-        print("=" * 50)
-        print("EVENT TYPE:", event_data.get("event_type"))
-        print("FULL EVENT:", event_data)
-        print("=" * 50)
-
-
-        obj,created=NodeStatus.objects.update_or_create(
+        NodeStatus.objects.update_or_create(
 
             workspace=workspace,
 
@@ -144,9 +137,12 @@ def process_event(event_data):
             }
         )
 
-        print("CREATED:", created)
-        print("NODE:", obj.id)
+        evaluate_rules(
 
+        node_id=node_id,
+
+        metadata=metadata
+    )
         return
 
     message = event_data.get("message","")
@@ -157,7 +153,7 @@ def process_event(event_data):
 
         severity = detect_severity(message)
 
-    Event.objects.create(
+    event=Event.objects.create(
 
         workspace=workspace,
 
@@ -176,4 +172,10 @@ def process_event(event_data):
         metadata=metadata,
 
         anomaly_score=calculate_anomaly_score(severity)
+    )
+
+    evaluate_rules(
+        node_id=node_id,
+        metadata=metadata,
+        event=event
     )

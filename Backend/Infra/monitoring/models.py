@@ -291,3 +291,69 @@ class Event(models.Model):
             f"{self.source_service} "
             f"- {self.severity}"
         )
+
+class Rule(models.Model):
+
+    name = models.CharField(
+        max_length=100
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    metric = models.CharField(
+        max_length=50
+    )
+
+    operator = models.CharField(
+        max_length=10
+    )
+
+    # scope = models.CharField(
+    #     max_length=50,
+    #     choices=[
+    #         ("system", "System"),
+    #         ("api", "API"),
+    #         ("service", "Service")
+    #     ]
+    # )
+    threshold = models.FloatField()
+    severity = models.CharField(
+        max_length=20
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return self.name
+    
+class RuleMatch(models.Model):
+
+    rule = models.ForeignKey(
+        Rule,
+        on_delete=models.CASCADE
+    )
+
+    node_id = models.CharField(
+        max_length=255
+    )
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    observed_value = models.FloatField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
