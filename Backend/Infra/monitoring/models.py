@@ -17,9 +17,7 @@ class User(AbstractUser):
         default='viewer'
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
 
@@ -34,9 +32,7 @@ class Workspace(models.Model):
         related_name='workspaces'
     )
 
-    name = models.CharField(
-        max_length=100
-    )
+    name = models.CharField(max_length=100)
 
     description = models.TextField(
         blank=True,
@@ -44,22 +40,16 @@ class Workspace(models.Model):
     )
 
     api_key = models.UUIDField(
-    unique=True,
-    editable=False,
-    default=uuid.uuid4
-)
-
-    is_active = models.BooleanField(
-        default=True
+        unique=True,
+        editable=False,
+        default=uuid.uuid4
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    is_active = models.BooleanField(default=True)
 
-    updated_at = models.DateTimeField(
-        auto_now=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
 
@@ -88,14 +78,9 @@ class NodeStatus(models.Model):
         related_name='nodes'
     )
 
-    node_id = models.CharField(
-        max_length=100
-    )
+    node_id = models.CharField(max_length=100)
 
-    source_service = models.CharField(
-        max_length=100,
-        default='telemetry-agent'
-    )
+    source_service = models.CharField(max_length=100,default='telemetry-agent')
 
     status = models.CharField(
         max_length=20,
@@ -103,56 +88,31 @@ class NodeStatus(models.Model):
         default='online'
     )
 
-    cpu_usage = models.FloatField(
-        default=0
-    )
+    cpu_usage = models.FloatField(default=0)
 
-    memory_usage = models.FloatField(
-        default=0
-    )
+    memory_usage = models.FloatField(default=0)
 
-    disk_usage = models.FloatField(
-        default=0
-    )
+    disk_usage = models.FloatField(default=0)
 
-    network_usage = models.FloatField(
-        default=0
-    )
+    network_usage = models.FloatField(default=0)
 
-    process_count = models.IntegerField(
-        default=0
-    )
+    process_count = models.IntegerField(default=0)
 
-    agent_version = models.CharField(
-        max_length=50,
-        default='1.0.0'
-    )
+    agent_version = models.CharField(max_length=50,default='1.0.0')
 
     last_heartbeat = models.DateTimeField()
 
-    last_seen = models.DateTimeField(
-        auto_now=True
-    )
+    last_seen = models.DateTimeField(auto_now=True)
 
-    metadata = models.JSONField(
-        default=dict,
-        blank=True
-    )
+    metadata = models.JSONField(default=dict,blank=True)
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    updated_at = models.DateTimeField(
-        auto_now=True
-    )
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
 
-        unique_together = (
-            'workspace',
-            'node_id'
-        )
+        unique_together = ('workspace','node_id')
 
         indexes = [
 
@@ -200,14 +160,9 @@ class Event(models.Model):
         related_name='events'
     )
 
-    node_id = models.CharField(
-        max_length=100,
-        default='local-node'
-    )
+    node_id = models.CharField(max_length=100,default='local-node')
 
-    source_service = models.CharField(
-        max_length=100
-    )
+    source_service = models.CharField(max_length=100)
 
     event_type = models.CharField(
         max_length=20,
@@ -225,30 +180,17 @@ class Event(models.Model):
 
     raw_log = models.TextField()
 
-    metadata = models.JSONField(
-        default=dict,
-        blank=True
-    )
+    metadata = models.JSONField(default=dict,blank=True)
 
-    anomaly_score = models.FloatField(
-        default=0
-    )
+    anomaly_score = models.FloatField(default=0)
 
-    is_resolved = models.BooleanField(
-        default=False
-    )
+    is_resolved = models.BooleanField(default=False)
 
-    occurrence_count = models.IntegerField(
-        default=1
-    )
+    occurrence_count = models.IntegerField(default=1)
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    updated_at = models.DateTimeField(
-        auto_now=True
-    )
+    updated_at = models.DateTimeField(auto_now=True)
 
     event_hash = models.CharField(
         max_length=64,
@@ -262,24 +204,17 @@ class Event(models.Model):
 
         indexes = [
             models.Index(
-                fields=[
-                    'workspace',
-                    'created_at'
-                ]
+                fields=['workspace','created_at']
             ),
-
             models.Index(
                 fields=['severity']
             ),
-
             models.Index(
                 fields=['event_type']
             ),
-
             models.Index(
                 fields=['created_at']
             ),
-
             models.Index(
                 fields=['source_service']
             ),
@@ -294,66 +229,179 @@ class Event(models.Model):
 
 class Rule(models.Model):
 
-    name = models.CharField(
-        max_length=100
-    )
+    name = models.CharField(max_length=255)
 
-    description = models.TextField(
-        blank=True
-    )
+    description = models.TextField(blank=True)
 
-    metric = models.CharField(
-        max_length=50
-    )
+    metric = models.CharField(max_length=100)
 
-    operator = models.CharField(
-        max_length=10
-    )
+    operator = models.CharField(max_length=10)
 
-    # scope = models.CharField(
-    #     max_length=50,
-    #     choices=[
-    #         ("system", "System"),
-    #         ("api", "API"),
-    #         ("service", "Service")
-    #     ]
-    # )
     threshold = models.FloatField()
-    severity = models.CharField(
-        max_length=20
-    )
 
-    is_active = models.BooleanField(
-        default=True
-    )
+    severity = models.CharField(max_length=20)
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
-    
+
 class RuleMatch(models.Model):
 
-    rule = models.ForeignKey(
-        Rule,
-        on_delete=models.CASCADE
-    )
+    rule = models.ForeignKey(Rule,on_delete=models.CASCADE)
 
-    node_id = models.CharField(
-        max_length=255
-    )
-
-    event = models.ForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
+    node_id = models.CharField(max_length=255)
 
     observed_value = models.FloatField()
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
+    event = models.ForeignKey(
+        Event,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
     )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+
+        return (
+            f"{self.rule.name} | "
+            f"{self.node_id} | "
+            f"{self.observed_value}"
+        )
+    
+class Anomaly(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    node_id = models.CharField(max_length=255)
+
+    metric_name = models.CharField(max_length=100)
+
+    observed_value = models.FloatField()
+
+    baseline_value = models.FloatField()
+
+    anomaly_score = models.FloatField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+
+        return (
+            f"{self.metric_name} | "
+            f"{self.node_id} | "
+            f"{self.anomaly_score}"
+        )
+    
+
+class Alert(models.Model):
+
+    STATUS_CHOICES = [
+        ("OPEN", "OPEN"),
+        ("ACKNOWLEDGED", "ACKNOWLEDGED"),
+        ("RESOLVED", "RESOLVED")
+    ]
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    node_id = models.CharField(max_length=255)
+
+    title = models.CharField(max_length=255)
+
+    severity = models.CharField(max_length=50)
+
+    source = models.CharField(max_length=50)
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="OPEN"
+    )
+
+    metadata = models.JSONField(default=dict)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+
+        return (
+
+            f"{self.title} "
+
+            f"[{self.status}]"
+        )
+    
+class HealthScore(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    node_id = models.CharField(max_length=255)
+
+    score = models.FloatField()
+
+    status = models.CharField(max_length=50)
+
+    metadata = models.JSONField(default=dict)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+
+        return (
+            f"{self.node_id} "
+            f"[{self.score}]"
+        )
+
+class Correlation(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    node_id = models.CharField(max_length=255)
+
+    correlation_type = models.CharField(max_length=100)
+
+    title = models.CharField(max_length=255)
+
+    severity = models.CharField(max_length=50)
+
+    metadata = models.JSONField(default=dict)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+
+        return self.title
+
+class Incident(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    node_id = models.CharField(max_length=255)
+
+    title = models.CharField(max_length=255)
+
+    severity = models.CharField(max_length=50)
+
+    status = models.CharField(max_length=50,default="OPEN")
+
+    metadata = models.JSONField(default=dict)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+
+        return (
+            f"{self.title}"
+        )

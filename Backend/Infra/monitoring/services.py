@@ -1,7 +1,10 @@
 from django.utils import timezone
-
+from .correlation_engine import correlate_node
+from .anomaly_detector import analyze_metrics
+from .rule_evaluator import evaluate_rules
 from .models import Workspace,Event,NodeStatus
-
+from .health_scoring import calculate_health_score
+from .incident_engine import detect_incidents
 
 def detect_severity(message):
 
@@ -54,16 +57,13 @@ def calculate_anomaly_score(severity):
     )
 
 
-def extract_metadata(
-    payload
-):
+def extract_metadata(payload):
 
     return payload.get(
         "metadata",
         {}
     )
 
-from .rule_evaluator import evaluate_rules
 def process_event(event_data):
     api_key = event_data.get("api_key")
 
@@ -139,10 +139,40 @@ def process_event(event_data):
 
         evaluate_rules(
 
-        node_id=node_id,
+            workspace=workspace,
 
-        metadata=metadata
-    )
+            node_id=node_id,
+
+            metadata=metadata
+        )
+
+        analyze_metrics(
+
+            workspace=workspace,
+
+            node_id=node_id,
+
+            metadata=metadata
+        )
+
+        calculate_health_score(
+
+            workspace,
+
+            node_id,
+
+            metadata
+        )
+
+        correlate_node(
+            workspace,
+            node_id
+        )
+
+        detect_incidents(
+            workspace,
+            node_id
+        )
         return
 
     message = event_data.get("message","")
@@ -153,7 +183,7 @@ def process_event(event_data):
 
         severity = detect_severity(message)
 
-    event=Event.objects.create(
+    event = Event.objects.create(
 
         workspace=workspace,
 
@@ -161,7 +191,7 @@ def process_event(event_data):
 
         source_service=source_service,
 
-        event_type=event_data.get("event_type","log"),
+        event_type=event_type,
 
         severity=severity,
 
@@ -171,11 +201,36 @@ def process_event(event_data):
 
         metadata=metadata,
 
-        anomaly_score=calculate_anomaly_score(severity)
+        anomaly_score=
+        calculate_anomaly_score(severity)
     )
 
     evaluate_rules(
+
+        workspace=workspace,
+
         node_id=node_id,
+
         metadata=metadata,
+
         event=event
+    )
+
+    calculate_health_score(
+
+        workspace,
+
+        node_id,
+
+        metadata
+    )
+
+    correlate_node(
+        workspace,
+        node_id
+    )
+
+    detect_incidents(
+        workspace,
+        node_id
     )
