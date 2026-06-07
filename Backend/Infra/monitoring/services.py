@@ -4,7 +4,6 @@ from .anomaly_detector import analyze_metrics
 from .rule_evaluator import evaluate_rules
 from .models import Workspace,Event,NodeStatus
 from .health_scoring import calculate_health_score
-from .incident_engine import detect_incidents
 
 def detect_severity(message):
 
@@ -168,11 +167,6 @@ def process_event(event_data):
             workspace,
             node_id
         )
-
-        detect_incidents(
-            workspace,
-            node_id
-        )
         return
 
     message = event_data.get("message","")
@@ -226,11 +220,6 @@ def process_event(event_data):
     )
 
     correlate_node(
-        workspace,
-        node_id
-    )
-
-    detect_incidents(
         workspace,
         node_id
     )
