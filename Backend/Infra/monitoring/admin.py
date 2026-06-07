@@ -11,9 +11,7 @@ from .models import (
     Alert,
     HealthScore,
     Correlation,
-    Incident
 )
-admin.site.register(Incident)
 admin.site.register(Correlation)
 admin.site.register(HealthScore)
 admin.site.register(Rule)

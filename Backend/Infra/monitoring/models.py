@@ -381,27 +381,3 @@ class Correlation(models.Model):
     def __str__(self):
 
         return self.title
-
-class Incident(models.Model):
-
-    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
-
-    node_id = models.CharField(max_length=255)
-
-    title = models.CharField(max_length=255)
-
-    severity = models.CharField(max_length=50)
-
-    status = models.CharField(max_length=50,default="OPEN")
-
-    metadata = models.JSONField(default=dict)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-
-        return (
-            f"{self.title}"
-        )
