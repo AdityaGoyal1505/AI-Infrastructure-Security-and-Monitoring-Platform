@@ -1,3 +1,5 @@
+from .tasks import generate_root_cause_task
+
 from .models import Alert,Anomaly,Correlation
 
 def correlate_node(workspace,node_id):
@@ -64,10 +66,7 @@ def correlate_node(workspace,node_id):
 
             correlation_type="RESOURCE_PRESSURE"
 
-        ).update(
-
-            is_active=False
-        )
+        ).update(is_active=False)
 
     if ("critical memory" in alert_titles and "disk full" in alert_titles):
 
@@ -103,10 +102,7 @@ def correlate_node(workspace,node_id):
 
             correlation_type="SYSTEM_DEGRADATION"
 
-        ).update(
-
-            is_active=False
-        )
+        ).update(is_active=False)
 
 
     anomaly_count = Anomaly.objects.filter(
@@ -151,10 +147,10 @@ def correlate_node(workspace,node_id):
 
             correlation_type="ANOMALY_STORM"
 
-        ).update(
-            is_active=False
-        )
+        ).update(is_active=False)
 
+    generate_root_cause_task.delay(workspace.id,node_id)
+        
     print(
 
         f"[CORRELATION] "
