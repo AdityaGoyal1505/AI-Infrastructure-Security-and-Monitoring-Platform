@@ -192,3 +192,7 @@ MAX_LOG_SIZE = env.int(
 ANOMALY_THRESHOLD = env.float(
     'ANOMALY_THRESHOLD'
 )
+
+OPENAI_API_KEY = os.getenv(
+    "OPENAI_API_KEY"
+)

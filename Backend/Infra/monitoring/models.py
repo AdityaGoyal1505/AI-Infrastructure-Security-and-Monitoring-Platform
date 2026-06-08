@@ -382,18 +382,27 @@ class Correlation(models.Model):
 
         return self.title
 
-# class RootCauseAnalysis(models.Model):
+class RootCauseAnalysis(models.Model):
 
-#     workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
 
-#     node_id = models.CharField(max_length=255)
+    node_id = models.CharField(max_length=255)
 
-#     correlation = models.ForeignKey(Correlation,on_delete=models.CASCADE)
+    root_cause = models.TextField()
 
-#     summary = models.TextField()
+    summary = models.TextField()
 
-#     confidence = models.FloatField()
+    confidence = models.FloatField()
 
-#     recommendations = models.JSONField(default=list)
+    recommendations = models.JSONField(default=list)
 
-#     created_at = models.DateTimeField(auto_now_add=True)
+    raw_response = models.JSONField(default=dict)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+
+        return (
+            f"{self.node_id} | "
+            f"{self.confidence}"
+        )
