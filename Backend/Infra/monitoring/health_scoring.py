@@ -6,68 +6,47 @@ def calculate_health_score(workspace,node_id,metadata):
 
     penalties = []
 
-    cpu = metadata.get(
-        "cpu_usage",
-        0
-    )
+    cpu = metadata.get("cpu_usage",0)
 
     if cpu >= 95:
 
         score -= 30
 
-        penalties.append(
-            "critical_cpu"
-        )
+        penalties.append("critical_cpu")
 
     elif cpu >= 80:
 
         score -= 20
 
-        penalties.append(
-            "high_cpu"
-        )
+        penalties.append("high_cpu")
 
-        memory = metadata.get(
-        "memory_usage",
-        0
-    )
+    memory = metadata.get("memory_usage",0)
 
     if memory >= 95:
 
         score -= 30
 
-        penalties.append(
-            "critical_memory"
-        )
+        penalties.append("critical_memory")
 
     elif memory >= 80:
 
         score -= 20
 
-        penalties.append(
-            "high_memory"
-        )
+        penalties.append("high_memory")
     
-        disk = metadata.get(
-        "disk_usage",
-        0
-    )
+    disk = metadata.get("disk_usage",0)
 
     if disk >= 95:
 
         score -= 30
 
-        penalties.append(
-            "critical_disk"
-        )
+        penalties.append("critical_disk")
 
     elif disk >= 80:
 
         score -= 20
 
-        penalties.append(
-            "high_disk"
-        )
+        penalties.append("high_disk")
 
     alerts = Alert.objects.filter(
 
@@ -109,34 +88,29 @@ def calculate_health_score(workspace,node_id,metadata):
 
         HealthScore.objects.update_or_create(
 
-        workspace=workspace,
+            workspace=workspace,
 
-        node_id=node_id,
+            node_id=node_id,
 
-        defaults={
+            defaults={
 
-            "score": score,
+                "score": score,
 
-            "status": status,
+                "status": status,
 
-            "metadata": {
+                "metadata": {
 
-                "penalties":
-                penalties,
+                    "penalties":penalties,
 
-                "cpu":
-                cpu,
+                    "cpu":cpu,
 
-                "memory":
-                memory,
+                    "memory":memory,
 
-                "disk":
-                disk,
+                    "disk":disk,
 
-                "open_alerts":
-                alerts.count()
+                    "open_alerts":alerts.count()
+                }
             }
-        }
     )
     
     return score

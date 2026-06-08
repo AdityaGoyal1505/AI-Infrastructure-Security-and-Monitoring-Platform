@@ -19,28 +19,19 @@ def evaluate_rules(workspace,node_id,metadata,event=None):
 
     for rule in active_rules:
 
-        value = metadata.get(
-            rule.metric
-        )
+        value = metadata.get(rule.metric)
 
         if value is None:
             continue
 
-        operator = OPERATORS.get(
-            rule.operator
-        )
+        operator = OPERATORS.get(rule.operator)
 
         if operator is None:
             continue
 
         try:
 
-            if operator(
-
-                float(value),
-
-                float(rule.threshold)
-            ):
+            if operator(float(value),float(rule.threshold)):
 
                 recent_match = RuleMatch.objects.filter(
 
@@ -59,7 +50,6 @@ def evaluate_rules(workspace,node_id,metadata,event=None):
                 ).exists()
 
                 if recent_match:
-
                     continue
 
                 rule_match= RuleMatch.objects.create(
@@ -73,18 +63,11 @@ def evaluate_rules(workspace,node_id,metadata,event=None):
                     observed_value=value
                 )
                 if rule.severity in ["WARNING","CRITICAL"]:
-                    create_rule_alert(
-                        workspace,
-                        rule_match
-                    )
+                    create_rule_alert(workspace,rule_match)
                 print(
-
                     f"[RULE MATCH] "
-
                     f"{rule.name} "
-
                     f"Node={node_id} "
-
                     f"Value={value}"
                 )
 

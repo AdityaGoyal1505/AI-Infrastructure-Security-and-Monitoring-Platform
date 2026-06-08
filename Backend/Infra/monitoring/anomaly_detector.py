@@ -5,27 +5,30 @@ from .models import Anomaly
 
 HISTORY_SIZE = 5
 
-ANOMALY_THRESHOLD = 1.0
+ANOMALY_THRESHOLD = 0.5
 
 metric_history = {}
+
+
+ANOMALY_METRICS = {
+    "cpu_usage",
+    "memory_usage",
+    "disk_usage",
+    "process_count"
+}
 
 def detect_anomaly(workspace,node_id,metric_name,value):
     
     print(f"ANALYZING: {metric_name}={value}")
 
-    history = metric_history.get(
-        f"{node_id}:{metric_name}",
-        []
-    )
+    history = metric_history.get(f"{node_id}:{metric_name}",[])
     
     history.append(float(value))
     print(f"HISTORY: {history}")
     if len(history) > HISTORY_SIZE:
         history.pop(0)
 
-    metric_history[
-        f"{node_id}:{metric_name}"
-    ] = history
+    metric_history[f"{node_id}:{metric_name}"] = history
 
     if len(history) < 5:
         return
@@ -68,9 +71,8 @@ def analyze_metrics(workspace,node_id,metadata):
 
     for metric_name, value in metadata.items():
 
-        if isinstance(
-            value,
-            (int, float)
-        ):
+        if metric_name not in ANOMALY_METRICS:
+            continue
 
+        if isinstance(value,(int, float)):
             detect_anomaly(workspace,node_id,metric_name,value)

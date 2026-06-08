@@ -5,11 +5,7 @@ import re
 
 def parse_log(service_name, raw_log):
 
-    metadata = {
-
-        "collected_at":
-        str(datetime.utcnow())
-    }
+    metadata = {"collected_at":str(datetime.utcnow())}
 
     event_type = "log"
 
@@ -28,60 +24,40 @@ def parse_log(service_name, raw_log):
 
             mapping = {
 
-                "CPU":
-                "cpu_usage",
+                "CPU":"cpu_usage",
 
-                "MEMORY":
-                "memory_usage",
+                "MEMORY":"memory_usage",
 
-                "DISK":
-                "disk_usage",
+                "DISK":"disk_usage",
 
-                "NETWORK":
-                "network_usage",
+                "NETWORK":"network_usage",
 
-                "CONNECTIONS":
-                "db_connections",
+                "CONNECTIONS":"db_connections",
 
-                "DB_CPU":
-                "db_cpu_usage",
+                "DB_CPU":"db_cpu_usage",
 
-                "DB_MEMORY":
-                "db_memory_usage",
+                "DB_MEMORY":"db_memory_usage",
 
-                "LATENCY":
-                "api_latency"
+                "LATENCY":"api_latency"
             }
 
-            metadata[
-                mapping.get(
-                    key,
-                    key.lower()
-                )
-            ] = value
+            metadata[mapping.get(key,key.lower())] = value
 
     return {
 
-        "node_id":
-        "local-node",
+        "node_id":"local-node",
 
-        "source_service":
-        service_name,
+        "source_service":service_name,
 
-        "event_type":
-        event_type,
+        "event_type":event_type,
 
-        "message":
-        raw_log.strip(),
+        "message":raw_log.strip(),
 
-        "raw_log":
-        raw_log.strip(),
+        "raw_log":raw_log.strip(),
 
-        "severity":
-        detect_severity(raw_log),
+        "severity":detect_severity(raw_log),
 
-        "metadata":
-        metadata
+        "metadata":metadata
     }
 
 def detect_severity(log):

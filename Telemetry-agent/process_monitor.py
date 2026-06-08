@@ -7,23 +7,17 @@ from datetime import datetime
 
 def collect_process_metrics():
 
-    process_count = len(
-        list(psutil.process_iter())
-    )
+    process_count = len(list(psutil.process_iter()))
 
     failed_processes = []
 
-    for proc in psutil.process_iter(
-        ['pid', 'name', 'status']
-    ):
+    for proc in psutil.process_iter(['pid', 'name', 'status']):
 
         try:
 
             if proc.info['status'] == 'zombie':
 
-                failed_processes.append(
-                    proc.info['name']
-                )
+                failed_processes.append(proc.info['name'])
 
         except Exception:
 
@@ -33,36 +27,22 @@ def collect_process_metrics():
 
         "node_id": "local-node",
 
-        "source_service": (
-            "process-monitor"
-        ),
+        "source_service": ("process-monitor"),
 
         "event_type": "metric",
 
-        "severity": (
-            "WARNING"
-            if failed_processes
-            else "INFO"
-        ),
+        "severity": ("WARNING" if failed_processes else "INFO"),
 
-        "message": (
-            "Process monitoring snapshot"
-        ),
+        "message": ("Process monitoring snapshot"),
 
         "raw_log": "PROCESS_METRICS",
 
         "metadata": {
 
-            "process_count": (
-                process_count
-            ),
+            "process_count": (process_count),
 
-            "failed_processes": (
-                failed_processes
-            ),
+            "failed_processes": (failed_processes),
 
-            "timestamp": str(
-                datetime.now()
-            )
+            "timestamp": str(datetime.now())
         }
     }

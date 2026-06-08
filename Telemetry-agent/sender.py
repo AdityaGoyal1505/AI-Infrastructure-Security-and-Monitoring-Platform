@@ -7,8 +7,7 @@ def send_batch(backend_url,api_key,events):
 
         "X-API-KEY": api_key,
 
-        "Content-Type":
-        "application/json"
+        "Content-Type":"application/json"
     }
 
     try:
@@ -17,9 +16,7 @@ def send_batch(backend_url,api_key,events):
 
             backend_url,
 
-            json={
-                "events": events
-            },
+            json={"events": events},
 
             headers=headers,
 
@@ -28,16 +25,9 @@ def send_batch(backend_url,api_key,events):
         print("SENDING BATCH")
         for event in events:
             print(event.get("event_type"))
-        if response.status_code in [
-
-            200,
-            201,
-            202
-
-        ]:
+        if response.status_code in [200,201,202]:
 
             print(
-
                 f"[BATCH SUCCESS] "
                 f"{len(events)} "
                 f"events sent"
@@ -46,7 +36,6 @@ def send_batch(backend_url,api_key,events):
             return True
 
         print(
-
             f"[BATCH FAILED] "
             f"{response.status_code}"
         )
@@ -56,7 +45,6 @@ def send_batch(backend_url,api_key,events):
     except Exception as error:
 
         print(
-
             f"[BATCH ERROR] "
             f"{error}"
         )
@@ -70,8 +58,7 @@ def send_event(backend_url,api_key,event_data):
 
         "X-API-KEY": api_key,
 
-        "Content-Type":
-        "application/json"
+        "Content-Type":"application/json"
     }
 
     try:
@@ -87,15 +74,8 @@ def send_event(backend_url,api_key,event_data):
             timeout=10
         )
 
-        if response.status_code in [
-            200,
-            201,
-            202
-
-        ]:
-
+        if response.status_code in [200,201,202]:
             print(
-
                 f"[SUCCESS] "
                 f"{event_data.get('event_type')} "
                 f"sent"
@@ -104,7 +84,6 @@ def send_event(backend_url,api_key,event_data):
             return True
 
         print(
-
             f"[FAILED] "
             f"{response.status_code}"
         )
@@ -114,7 +93,6 @@ def send_event(backend_url,api_key,event_data):
     except Exception as error:
 
         print(
-
             f"[SEND ERROR] "
             f"{error}"
         )

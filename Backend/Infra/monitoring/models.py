@@ -381,3 +381,19 @@ class Correlation(models.Model):
     def __str__(self):
 
         return self.title
+
+# class RootCauseAnalysis(models.Model):
+
+#     workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+#     node_id = models.CharField(max_length=255)
+
+#     correlation = models.ForeignKey(Correlation,on_delete=models.CASCADE)
+
+#     summary = models.TextField()
+
+#     confidence = models.FloatField()
+
+#     recommendations = models.JSONField(default=list)
+
+#     created_at = models.DateTimeField(auto_now_add=True)

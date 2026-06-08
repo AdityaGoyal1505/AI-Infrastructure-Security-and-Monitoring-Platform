@@ -10,14 +10,9 @@ class EventIngestView(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def post(
-        self,
-        request
-    ):
+    def post(self,request):
 
-        api_key = request.headers.get(
-            "X-API-KEY"
-        )
+        api_key = request.headers.get("X-API-KEY")
 
         if not api_key:
 
@@ -33,9 +28,7 @@ class EventIngestView(APIView):
 
         try:
 
-            Workspace.objects.get(
-                api_key=api_key
-            )
+            Workspace.objects.get(api_key=api_key)
 
         except Workspace.DoesNotExist:
 
@@ -53,9 +46,7 @@ class EventIngestView(APIView):
 
         payload["api_key"] = api_key
 
-        process_event_task.delay(
-            payload
-        )
+        process_event_task.delay(payload)
 
         return Response(
 
@@ -73,14 +64,9 @@ class BatchEventIngestView(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def post(
-        self,
-        request
-    ):
+    def post(self,request):
 
-        api_key = request.headers.get(
-            "X-API-KEY"
-        )
+        api_key = request.headers.get("X-API-KEY")
 
         if not api_key:
 
@@ -96,9 +82,7 @@ class BatchEventIngestView(APIView):
 
         try:
 
-            Workspace.objects.get(
-                api_key=api_key
-            )
+            Workspace.objects.get(api_key=api_key)
 
         except Workspace.DoesNotExist:
 
@@ -112,10 +96,7 @@ class BatchEventIngestView(APIView):
                 status=401
             )
 
-        events = request.data.get(
-            "events",
-            []
-        )
+        events = request.data.get("events",[])
         for event in events:
             print("RECEIVED EVENT")
             print(event)

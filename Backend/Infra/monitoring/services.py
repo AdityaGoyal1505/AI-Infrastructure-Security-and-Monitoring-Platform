@@ -50,18 +50,12 @@ def calculate_anomaly_score(severity):
         "CRITICAL": 1.0
     }
 
-    return mapping.get(
-        severity,
-        0.1
-    )
+    return mapping.get(severity,0.1)
 
 
 def extract_metadata(payload):
 
-    return payload.get(
-        "metadata",
-        {}
-    )
+    return payload.get("metadata",{})
 
 def process_event(event_data):
     api_key = event_data.get("api_key")
@@ -86,53 +80,25 @@ def process_event(event_data):
 
             defaults={
 
-                "source_service":
-                source_service,
+                "source_service":source_service,
 
-                "status":
-                "online",
+                "status":"online",
 
-                "cpu_usage":
-                metadata.get(
-                    "cpu_usage",
-                    0
-                ),
+                "cpu_usage":metadata.get("cpu_usage",0),
 
-                "memory_usage":
-                metadata.get(
-                    "memory_usage",
-                    0
-                ),
+                "memory_usage":metadata.get("memory_usage",0),
 
-                "disk_usage":
-                metadata.get(
-                    "disk_usage",
-                    0
-                ),
+                "disk_usage":metadata.get("disk_usage",0),
 
-                "network_usage":
-                metadata.get(
-                    "network_usage",
-                    0
-                ),
+                "network_usage":metadata.get("network_usage",0),
 
-                "process_count":
-                metadata.get(
-                    "process_count",
-                    0
-                ),
+                "process_count":metadata.get("process_count",0),
 
-                "agent_version":
-                metadata.get(
-                    "agent_version",
-                    "1.0.0"
-                ),
+                "agent_version":metadata.get("agent_version","1.0.0"),
 
-                "last_heartbeat":
-                timezone.now(),
+                "last_heartbeat":timezone.now(),
 
-                "metadata":
-                metadata
+                "metadata":metadata
             }
         )
 
@@ -157,9 +123,7 @@ def process_event(event_data):
         calculate_health_score(
 
             workspace,
-
             node_id,
-
             metadata
         )
 
@@ -195,8 +159,7 @@ def process_event(event_data):
 
         metadata=metadata,
 
-        anomaly_score=
-        calculate_anomaly_score(severity)
+        anomaly_score=calculate_anomaly_score(severity)
     )
 
     evaluate_rules(
@@ -211,11 +174,8 @@ def process_event(event_data):
     )
 
     calculate_health_score(
-
         workspace,
-
         node_id,
-
         metadata
     )
 

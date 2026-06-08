@@ -12,25 +12,11 @@ from batch_sender import batch_sender_loop
 from event_queue import event_queue
 from config_validator import validate_config
 
-BASE_DIR = os.path.dirname(
-    sys.executable
-) if getattr(
-    sys,
-    "frozen",
-    False
-) else os.path.dirname(
-    os.path.abspath(__file__)
-)
+BASE_DIR = os.path.dirname(sys.executable) if getattr(sys,"frozen",False) else os.path.dirname(os.path.abspath(__file__))
 
-CONFIG_PATH = os.path.join(
-    BASE_DIR,
-    "config.json"
-)
+CONFIG_PATH = os.path.join(BASE_DIR,"config.json")
 
-with open(
-    CONFIG_PATH,
-    "r"
-) as config_file:
+with open(CONFIG_PATH,"r") as config_file:
 
     config = json.load(config_file)
 
@@ -44,7 +30,6 @@ api_key = config["api_key"]
 def metrics_loop():
 
     while True:
-
         try:
 
             metrics_event = (collect_system_metrics())
@@ -57,10 +42,7 @@ def metrics_loop():
 
         except Exception as error:
 
-            print(
-                f"[METRICS ERROR] "
-                f"{error}"
-            )
+            print(f"[METRICS ERROR] "f"{error}")
 
         time.sleep(10)
 
@@ -68,7 +50,6 @@ def metrics_loop():
 def heartbeat_loop():
 
     while True:
-
         try:
 
             heartbeat = (generate_heartbeat())
@@ -77,20 +58,14 @@ def heartbeat_loop():
 
         except Exception as error:
 
-            print(
-                f"[HEARTBEAT ERROR] "
-                f"{error}"
-            )
+            print(f"[HEARTBEAT ERROR] "f"{error}")
 
         time.sleep(60)
 
 
 if __name__ == "__main__":
 
-    print(
-        "[STARTING] "
-        "Telemetry Agent"
-    )
+    print("[STARTING] ""Telemetry Agent")
 
     threads = []
     if "logs" in config:
@@ -119,7 +94,6 @@ if __name__ == "__main__":
             threads.append(thread)
 
     metrics_thread = threading.Thread(
-
         target=metrics_loop,
 
         daemon=True
@@ -132,7 +106,6 @@ if __name__ == "__main__":
     )
 
     heartbeat_thread = threading.Thread(
-
         target=heartbeat_loop,
 
         daemon=True
@@ -143,7 +116,6 @@ if __name__ == "__main__":
     threads.append(heartbeat_thread)
 
     batch_thread = threading.Thread(
-
         target=batch_sender_loop,
 
         args=(
@@ -160,10 +132,7 @@ if __name__ == "__main__":
 
     threads.append(batch_thread)
 
-    print(
-        "[RUNNING] "
-        "Agent active"
-    )
+    print("[RUNNING] ""Agent active")
 
     while True:
 

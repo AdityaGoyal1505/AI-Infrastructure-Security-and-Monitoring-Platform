@@ -26,16 +26,10 @@ def collect_system_metrics():
 
             "disk_usage": psutil.disk_usage('/').percent,
 
-            "network_sent": (
-                psutil.net_io_counters().bytes_sent
-            ),
+            "network_sent": (psutil.net_io_counters().bytes_sent),
 
-            "network_received": (
-                psutil.net_io_counters().bytes_recv
-            ),
+            "network_received": (psutil.net_io_counters().bytes_recv),
 
-            "timestamp": str(
-                datetime.now()
-            )
+            "timestamp": str(datetime.now())
         }
     }

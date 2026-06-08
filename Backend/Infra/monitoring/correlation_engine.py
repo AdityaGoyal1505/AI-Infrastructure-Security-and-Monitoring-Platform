@@ -11,12 +11,7 @@ def correlate_node(workspace,node_id):
         status="OPEN"
     )
 
-    alert_titles = set(
-
-        alert.title.lower()
-
-        for alert in alerts
-    )
+    alert_titles = set(alert.title.lower() for alert in alerts)
 
     resource_matches = 0
 
@@ -52,7 +47,6 @@ def correlate_node(workspace,node_id):
                 "severity":"CRITICAL",
 
                 "metadata": {
-
                     "matched_alerts":list(alert_titles)
                 },
 

@@ -12,6 +12,7 @@ from .models import (
     HealthScore,
     Correlation,
 )
+
 admin.site.register(Correlation)
 admin.site.register(HealthScore)
 admin.site.register(Rule)
