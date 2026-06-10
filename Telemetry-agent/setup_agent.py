@@ -3,8 +3,6 @@ import json
 
 config = {}
 
-config["backend_url"] = input("Backend URL: ")
-
 config["api_key"] = input("Workspace API Key: ")
 
 log_path = input("Log file path: ")

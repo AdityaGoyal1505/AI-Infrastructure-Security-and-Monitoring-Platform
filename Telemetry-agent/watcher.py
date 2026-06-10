@@ -21,12 +21,7 @@ class LogHandler(FileSystemEventHandler):
 
         try:
 
-            with open(
-                self.file_path,
-                "r",
-                encoding="utf-8",
-                errors="ignore"
-            ) as file:
+            with open(self.file_path,"r",encoding="utf-8",errors="ignore") as file:
 
                 file.seek(self.last_position)
 
@@ -61,18 +56,10 @@ class LogHandler(FileSystemEventHandler):
 
             self.process_new_lines()
 
+# backend_url,api_key
+def start_watcher(service_name,file_path):
 
-def start_watcher(
-    service_name,
-    file_path,
-    backend_url,
-    api_key
-):
-
-    handler = LogHandler(
-        service_name,
-        file_path
-    )
+    handler = LogHandler(service_name,file_path)
 
     observer = Observer()
 
@@ -82,10 +69,7 @@ def start_watcher(
 
         handler,
 
-        path=file_path.rsplit(
-            "/",
-            1
-        )[0] if "/" in file_path else ".",
+        path=file_path.rsplit("/",1)[0] if "/" in file_path else ".",
 
         recursive=False
     )

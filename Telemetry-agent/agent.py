@@ -22,8 +22,6 @@ with open(CONFIG_PATH,"r") as config_file:
 
 validate_config(config)
 
-backend_url = config["backend_url"]
-
 api_key = config["api_key"]
 
 
@@ -32,11 +30,11 @@ def metrics_loop():
     while True:
         try:
 
-            metrics_event = (collect_system_metrics())
+            metrics_event = collect_system_metrics()
 
             event_queue.put(metrics_event)
 
-            process_event = (collect_process_metrics())
+            process_event = collect_process_metrics()
 
             event_queue.put(process_event)
 
@@ -52,7 +50,7 @@ def heartbeat_loop():
     while True:
         try:
 
-            heartbeat = (generate_heartbeat())
+            heartbeat = generate_heartbeat()
 
             event_queue.put(heartbeat)
 
@@ -81,8 +79,6 @@ if __name__ == "__main__":
 
                     log_config["path"],
 
-                    backend_url,
-
                     api_key
                 ),
 
@@ -93,23 +89,13 @@ if __name__ == "__main__":
 
             threads.append(thread)
 
-    metrics_thread = threading.Thread(
-        target=metrics_loop,
-
-        daemon=True
-    )
+    metrics_thread = threading.Thread(target=metrics_loop,daemon=True)
 
     metrics_thread.start()
 
-    threads.append(
-        metrics_thread
-    )
+    threads.append(metrics_thread)
 
-    heartbeat_thread = threading.Thread(
-        target=heartbeat_loop,
-
-        daemon=True
-    )
+    heartbeat_thread = threading.Thread(target=heartbeat_loop,daemon=True)
 
     heartbeat_thread.start()
 
@@ -118,12 +104,7 @@ if __name__ == "__main__":
     batch_thread = threading.Thread(
         target=batch_sender_loop,
 
-        args=(
-
-            backend_url,
-
-            api_key
-        ),
+        args=(api_key, ),
 
         daemon=True
     )

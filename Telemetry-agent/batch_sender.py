@@ -4,8 +4,9 @@ from sender import send_batch
 from event_queue import event_queue
 
 BATCH_SIZE = 50
+BACKEND_URL = "http://127.0.0.1:8000/api/events/batch/"
 
-def batch_sender_loop(backend_url,api_key):
+def batch_sender_loop(api_key):
 
     while True:
 
@@ -17,6 +18,6 @@ def batch_sender_loop(backend_url,api_key):
 
         if batch:
 
-            send_batch(backend_url,api_key,batch)
+            send_batch(BACKEND_URL,api_key,batch)
 
         time.sleep(2)

@@ -1,5 +1,3 @@
-# telemetry-agent/process_monitor.py
-
 import psutil
 
 from datetime import datetime

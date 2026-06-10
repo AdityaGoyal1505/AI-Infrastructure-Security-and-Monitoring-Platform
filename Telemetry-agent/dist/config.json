@@ -1,6 +1,4 @@
 {
-  "backend_url": "http://127.0.0.1:8000/api/events/batch/",
-
   "_comment": "Need to be filled by user with actual backend URL",
 
   "api_key": "ac5b2164-c5a3-4ff8-8806-9621cc78807e",

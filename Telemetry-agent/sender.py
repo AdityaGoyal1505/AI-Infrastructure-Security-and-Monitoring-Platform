@@ -1,7 +1,8 @@
 import requests
 
+BACKEND_URL = "http://127.0.0.1:8000/api/events/batch/"
 
-def send_batch(backend_url,api_key,events):
+def send_batch(api_key,events):
 
     headers = {
 
@@ -11,10 +12,9 @@ def send_batch(backend_url,api_key,events):
     }
 
     try:
-        print("POSTING TO:", backend_url)
         response = requests.post(
 
-            backend_url,
+            BACKEND_URL,
 
             json={"events": events},
 
@@ -52,7 +52,7 @@ def send_batch(backend_url,api_key,events):
         return False
 
 
-def send_event(backend_url,api_key,event_data):
+def send_event(api_key,event_data):
 
     headers = {
 
@@ -65,7 +65,7 @@ def send_event(backend_url,api_key,event_data):
 
         response = requests.post(
 
-            backend_url,
+            BACKEND_URL,
 
             json=event_data,
 

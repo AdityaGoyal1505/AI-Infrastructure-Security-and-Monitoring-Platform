@@ -13,10 +13,7 @@ def parse_log(service_name, raw_log):
 
         event_type = "metric"
 
-        matches = re.findall(
-            r'([A-Z_]+)=([0-9.]+)',
-            raw_log.upper()
-        )
+        matches = re.findall(r'([A-Z_]+)=([0-9.]+)',raw_log.upper())
 
         for key, value in matches:
 
