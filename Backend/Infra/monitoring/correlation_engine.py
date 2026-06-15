@@ -1,8 +1,8 @@
-from .tasks import generate_root_cause_task
-
 from .models import Alert,Anomaly,Correlation
 
 def correlate_node(workspace,node_id):
+
+    from .tasks import generate_root_cause_task
 
     alerts = Alert.objects.filter(
 
@@ -48,9 +48,7 @@ def correlate_node(workspace,node_id):
 
                 "severity":"CRITICAL",
 
-                "metadata": {
-                    "matched_alerts":list(alert_titles)
-                },
+                "metadata": {"matched_alerts":list(alert_titles)},
 
                 "is_active":True
             }
@@ -84,9 +82,7 @@ def correlate_node(workspace,node_id):
 
                 "severity":"CRITICAL",
 
-                "metadata": {
-                    "matched_alerts":list(alert_titles)
-                },
+                "metadata": {"matched_alerts":list(alert_titles)},
 
                 "is_active":True
             }
@@ -129,9 +125,7 @@ def correlate_node(workspace,node_id):
 
                 "severity":"WARNING",
 
-                "metadata": {
-                    "anomaly_count":anomaly_count
-                },
+                "metadata": {"anomaly_count":anomaly_count},
 
                 "is_active":True
             }

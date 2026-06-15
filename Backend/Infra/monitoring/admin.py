@@ -11,8 +11,14 @@ from .models import (
     Alert,
     HealthScore,
     Correlation,
+    RootCauseAnalysis,
+    Recommendation,
+    RCAInsight,
 )
 
+admin.site.register(RootCauseAnalysis)
+admin.site.register(Recommendation)
+admin.site.register(RCAInsight)
 admin.site.register(Correlation)
 admin.site.register(HealthScore)
 admin.site.register(Rule)

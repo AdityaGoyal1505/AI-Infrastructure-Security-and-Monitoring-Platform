@@ -5,45 +5,24 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
 
-    ROLE_CHOICES = [
-        ('admin', 'Admin'),
-        ('engineer', 'Engineer'),
-        ('viewer', 'Viewer'),
-    ]
+    ROLE_CHOICES = [('admin', 'Admin'),('engineer', 'Engineer'),('viewer', 'Viewer'),]
 
-    role = models.CharField(
-        max_length=20,
-        choices=ROLE_CHOICES,
-        default='viewer'
-    )
+    role = models.CharField(max_length=20,choices=ROLE_CHOICES,default='viewer')
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-
         return self.username
-
 
 class Workspace(models.Model):
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='workspaces'
-    )
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='workspaces')
 
     name = models.CharField(max_length=100)
 
-    description = models.TextField(
-        blank=True,
-        null=True
-    )
+    description = models.TextField(blank=True,null=True)
 
-    api_key = models.UUIDField(
-        unique=True,
-        editable=False,
-        default=uuid.uuid4
-    )
+    api_key = models.UUIDField(unique=True,editable=False,default=uuid.uuid4)
 
     is_active = models.BooleanField(default=True)
 
@@ -66,27 +45,15 @@ class Workspace(models.Model):
 
 class NodeStatus(models.Model):
 
-    STATUS_CHOICES = [
-        ('online', 'Online'),
-        ('offline', 'Offline'),
-        ('warning', 'Warning'),
-    ]
+    STATUS_CHOICES = [('online', 'Online'),('offline', 'Offline'),('warning', 'Warning'),]
 
-    workspace = models.ForeignKey(
-        Workspace,
-        on_delete=models.CASCADE,
-        related_name='nodes'
-    )
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE,related_name='nodes')
 
     node_id = models.CharField(max_length=100)
 
     source_service = models.CharField(max_length=100,default='telemetry-agent')
 
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='online'
-    )
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='online')
 
     cpu_usage = models.FloatField(default=0)
 
@@ -115,22 +82,10 @@ class NodeStatus(models.Model):
         unique_together = ('workspace','node_id')
 
         indexes = [
-
-            models.Index(
-                fields=['workspace']
-            ),
-
-            models.Index(
-                fields=['node_id']
-            ),
-
-            models.Index(
-                fields=['status']
-            ),
-
-            models.Index(
-                fields=['last_heartbeat']
-            ),
+            models.Index(fields=['workspace']),
+            models.Index(fields=['node_id']),
+            models.Index(fields=['status']),
+            models.Index(fields=['last_heartbeat']),
         ]
 
     def __str__(self):
@@ -142,39 +97,19 @@ class NodeStatus(models.Model):
     
 class Event(models.Model):
 
-    EVENT_TYPES = [
-        ('log', 'Log'),
-        ('incident', 'Incident'),
-    ]
+    EVENT_TYPES = [('log', 'Log'),('incident', 'Incident'),]
 
-    SEVERITY_LEVELS = [
-        ('INFO', 'INFO'),
-        ('WARNING', 'WARNING'),
-        ('ERROR', 'ERROR'),
-        ('CRITICAL', 'CRITICAL'),
-    ]
+    SEVERITY_LEVELS = [('INFO', 'INFO'),('WARNING', 'WARNING'),('ERROR', 'ERROR'),('CRITICAL', 'CRITICAL'),]
 
-    workspace = models.ForeignKey(
-        Workspace,
-        on_delete=models.CASCADE,
-        related_name='events'
-    )
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE,related_name='events')
 
     node_id = models.CharField(max_length=100,default='local-node')
 
     source_service = models.CharField(max_length=100)
 
-    event_type = models.CharField(
-        max_length=20,
-        choices=EVENT_TYPES,
-        default='log'
-    )
+    event_type = models.CharField(max_length=20,choices=EVENT_TYPES,default='log')
 
-    severity = models.CharField(
-        max_length=20,
-        choices=SEVERITY_LEVELS,
-        default='INFO'
-    )
+    severity = models.CharField(max_length=20,choices=SEVERITY_LEVELS,default='INFO')
 
     message = models.TextField()
 
@@ -192,32 +127,18 @@ class Event(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True)
 
-    event_hash = models.CharField(
-        max_length=64,
-        blank=True,
-        null=True
-    )
+    event_hash = models.CharField(max_length=64,blank=True,null=True)
     
     class Meta:
 
         ordering = ['-created_at']
 
         indexes = [
-            models.Index(
-                fields=['workspace','created_at']
-            ),
-            models.Index(
-                fields=['severity']
-            ),
-            models.Index(
-                fields=['event_type']
-            ),
-            models.Index(
-                fields=['created_at']
-            ),
-            models.Index(
-                fields=['source_service']
-            ),
+            models.Index(fields=['workspace','created_at']),
+            models.Index(fields=['severity']),
+            models.Index(fields=['event_type']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['source_service']),
         ]
 
     def __str__(self):
@@ -256,12 +177,7 @@ class RuleMatch(models.Model):
 
     observed_value = models.FloatField()
 
-    event = models.ForeignKey(
-        Event,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
-    )
+    event = models.ForeignKey(Event,null=True,blank=True,on_delete=models.SET_NULL)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -297,14 +213,9 @@ class Anomaly(models.Model):
             f"{self.anomaly_score}"
         )
     
-
 class Alert(models.Model):
 
-    STATUS_CHOICES = [
-        ("OPEN", "OPEN"),
-        ("ACKNOWLEDGED", "ACKNOWLEDGED"),
-        ("RESOLVED", "RESOLVED")
-    ]
+    STATUS_CHOICES = [("OPEN", "OPEN"),("ACKNOWLEDGED", "ACKNOWLEDGED"),("RESOLVED", "RESOLVED")]
 
     workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
 
@@ -316,11 +227,7 @@ class Alert(models.Model):
 
     source = models.CharField(max_length=50)
 
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default="OPEN"
-    )
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default="OPEN")
 
     metadata = models.JSONField(default=dict)
 
@@ -406,3 +313,91 @@ class RootCauseAnalysis(models.Model):
             f"{self.node_id} | "
             f"{self.confidence}"
         )
+
+class Recommendation(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    node_id = models.CharField(max_length=255)
+
+    root_cause_analysis = models.ForeignKey(RootCauseAnalysis,on_delete=models.CASCADE,related_name="recommendations_generated")
+
+    title = models.CharField(max_length=255)
+
+    description = models.TextField()
+
+    priority = models.CharField(max_length=20,choices=[("LOW","LOW"),("MEDIUM","MEDIUM"),("HIGH","HIGH"),("CRITICAL","CRITICAL")])
+
+    is_applied = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+
+        return (
+            f"{self.priority} | "
+            f"{self.title}"
+        )
+
+class RCAInsight(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    insight_type = models.CharField(max_length=100)
+
+    title = models.CharField(max_length=255)
+
+    description = models.TextField()
+
+    occurrence_count = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+
+        return self.title
+
+class TrendSnapshot(models.Model):
+
+    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
+
+    metric_name = models.CharField(max_length=100)
+
+    current_value = models.FloatField()
+
+    previous_value = models.FloatField()
+
+    change_percentage = models.FloatField()
+
+    trend_type = models.CharField(max_length=50)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class RiskPrediction(models.Model):
+
+    workspace = models.ForeignKey(
+        Workspace,
+        on_delete=models.CASCADE
+    )
+
+    node_id = models.CharField(max_length=255)
+
+    risk_score = models.FloatField()
+
+    risk_level = models.CharField(max_length=50)
+
+    explanation = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=["workspace","node_id"],
+
+                name="unique_prediction_per_node"
+            )
+        ]

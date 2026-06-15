@@ -9,28 +9,15 @@ def detect_severity(message):
 
     message = message.lower()
 
-    if any(
-        keyword in message
-        for keyword in ["critical","fatal","panic"]
-    ):
+    if any(keyword in message for keyword in ["critical","fatal","panic"]):
 
         return "CRITICAL"
 
-    if any(
-
-        keyword in message
-
-        for keyword in ["error","failed","exception"]
-    ):
+    if any(keyword in message for keyword in ["error","failed","exception"]):
 
         return "ERROR"
 
-    if any(
-
-        keyword in message
-
-        for keyword in ["warning","warn"]
-    ):
+    if any(keyword in message for keyword in ["warning","warn"]):
 
         return "WARNING"
 
@@ -42,11 +29,8 @@ def calculate_anomaly_score(severity):
     mapping = {
 
         "INFO": 0.1,
-
         "WARNING": 0.4,
-
         "ERROR": 0.7,
-
         "CRITICAL": 1.0
     }
 
@@ -120,17 +104,9 @@ def process_event(event_data):
             metadata=metadata
         )
 
-        calculate_health_score(
+        calculate_health_score(workspace,node_id,metadata)
 
-            workspace,
-            node_id,
-            metadata
-        )
-
-        correlate_node(
-            workspace,
-            node_id
-        )
+        correlate_node(workspace,node_id)
         return
 
     message = event_data.get("message","")
@@ -173,13 +149,6 @@ def process_event(event_data):
         event=event
     )
 
-    calculate_health_score(
-        workspace,
-        node_id,
-        metadata
-    )
+    calculate_health_score(workspace,node_id,metadata)
 
-    correlate_node(
-        workspace,
-        node_id
-    )
+    correlate_node(workspace,node_id)

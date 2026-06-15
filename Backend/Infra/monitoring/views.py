@@ -1,9 +1,241 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from monitoring.models import RootCauseAnalysis,Recommendation
+from .models import Workspace
+from .tasks import process_event_task
+from .models import RCAInsight
+from .serializers import RCAInsightSerializer,WorkspaceSetupSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from django.http import FileResponse
+from django.conf import settings
+import os
+from django.shortcuts import get_object_or_404
+
+from rest_framework_simplejwt.tokens import RefreshToken #type:ignore
 
 from .models import Workspace
+from .serializers import (
+    RegisterSerializer,
+    LoginSerializer,
+    UserSerializer,
+    WorkspaceSerializer,
+    WorkspaceCreateSerializer
+)
 
-from .tasks import process_event_task
+class RegisterView(APIView):
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+
+        serializer = RegisterSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            user = serializer.save()
+
+            return Response(
+                {
+                    "message": "User registered successfully",
+                    "user": UserSerializer(user).data
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class LoginView(APIView):
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+
+        serializer = LoginSerializer(data=request.data)
+
+        if not serializer.is_valid():
+
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        user = serializer.validated_data["user"]
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": UserSerializer(user).data
+            },
+            status=status.HTTP_200_OK
+        )
+
+class CurrentUserView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        serializer = UserSerializer(request.user)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+class WorkspaceListCreateView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        workspaces = Workspace.objects.filter(user=request.user).order_by("-created_at")
+
+        serializer = WorkspaceSerializer(workspaces,many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+
+        serializer = WorkspaceCreateSerializer(
+            data=request.data,
+            context={"request": request}
+        )
+
+        if serializer.is_valid():
+
+            workspace = serializer.save()
+
+            return Response(WorkspaceSerializer(workspace).data,status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+class WorkspaceDetailView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get_workspace(self, request, workspace_id):
+
+        return get_object_or_404(Workspace,id=workspace_id,user=request.user)
+
+    def get(self, request, workspace_id):
+
+        workspace = self.get_workspace(request,workspace_id)
+
+        serializer = WorkspaceSerializer(workspace)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def put(self, request, workspace_id):
+
+        workspace = self.get_workspace(request,workspace_id)
+
+        serializer = WorkspaceSerializer(workspace,data=request.data,partial=True)
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, workspace_id):
+
+        workspace = self.get_workspace(request,workspace_id)
+
+        workspace.delete()
+
+        return Response(
+            {
+                "message": "Workspace deleted successfully"
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+class WorkspaceSetupView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, workspace_id):
+
+        workspace = get_object_or_404(
+
+            Workspace,
+
+            id=workspace_id,
+
+            user=request.user
+        )
+
+        data = {
+
+            "workspace_id": workspace.id,
+
+            "workspace_name": workspace.name,
+
+            "api_key": workspace.api_key,
+
+            "download_url":f"/api/workspaces/{workspace.id}/agent/"
+        }
+
+        serializer = WorkspaceSetupSerializer(data)
+
+        return Response(
+
+            serializer.data,
+
+            status=status.HTTP_200_OK
+        )
+
+class DownloadAgentView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, workspace_id):
+
+        workspace = get_object_or_404(
+            Workspace,
+            id=workspace_id,
+            user=request.user
+        )
+        workspace = get_object_or_404(
+            Workspace,
+            id=workspace_id
+        )
+        base_dir = os.path.dirname(settings.BASE_DIR)
+
+        agent_path = os.path.join(
+
+            base_dir,
+
+            "telemetry-agent",
+
+            "monitoring-agent.zip"
+        )
+
+        if not os.path.exists(agent_path):
+
+            return Response(
+
+                {
+
+                    "error":"Agent package not found"
+
+                },
+
+                status=404
+            )
+
+        return FileResponse(
+
+            open(agent_path, "rb"),
+
+            as_attachment=True,
+
+            filename="monitoring-agent.zip"
+        )
 
 class EventIngestView(APIView):
 # ac5b2164-c5a3-4ff8-8806-9621cc78807e
@@ -19,8 +251,7 @@ class EventIngestView(APIView):
             return Response(
 
                 {
-                    "error":
-                    "API key missing"
+                    "error":"API key missing"
                 },
 
                 status=401
@@ -35,8 +266,7 @@ class EventIngestView(APIView):
             return Response(
 
                 {
-                    "error":
-                    "Invalid API key"
+                    "error":"Invalid API key"
                 },
 
                 status=401
@@ -51,8 +281,7 @@ class EventIngestView(APIView):
         return Response(
 
             {
-                "status":
-                "accepted"
+                "status":"accepted"
             },
 
             status=202
@@ -73,8 +302,7 @@ class BatchEventIngestView(APIView):
             return Response(
 
                 {
-                    "error":
-                    "API key missing"
+                    "error":"API key missing"
                 },
 
                 status=401
@@ -89,8 +317,7 @@ class BatchEventIngestView(APIView):
             return Response(
 
                 {
-                    "error":
-                    "Invalid API key"
+                    "error":"Invalid API key"
                 },
 
                 status=401
@@ -107,9 +334,126 @@ class BatchEventIngestView(APIView):
         return Response(
 
             {
-                "accepted":
-                len(events)
+                "accepted":len(events)
             },
 
             status=202
         )
+    
+from .models import (
+    RootCauseAnalysis,
+    Recommendation,
+    HealthScore,
+    Anomaly,
+    RCAInsight,
+    RiskPrediction,
+    Alert
+)
+
+from .serializers import (
+    RootCauseAnalysisSerializer,
+    RecommendationSerializer,
+    HealthScoreSerializer,
+    AnomalySerializer,
+    RCAInsightSerializer,
+    RiskPredictionSerializer
+)
+
+class AIInsightsView(APIView):
+
+    def get(self, request):
+
+        workspace_id = request.GET.get("workspace")
+
+        if not workspace_id:
+
+            return Response(
+
+                {
+                    "error": "workspace query parameter is required"
+                },
+
+                status=400
+
+            )
+
+        latest_rca = RootCauseAnalysis.objects.filter(workspace_id=workspace_id).order_by("-created_at").first()
+
+
+        latest_health_score = HealthScore.objects.filter(workspace_id=workspace_id).order_by("-updated_at").first()
+
+        recommendations = Recommendation.objects.filter(workspace_id=workspace_id).order_by("-created_at")[:5]
+
+        anomalies = Anomaly.objects.filter(workspace_id=workspace_id).order_by("-created_at")[:10]
+
+        insights = RCAInsight.objects.filter(workspace_id=workspace_id).order_by("-occurrence_count")[:5]
+
+        alerts_count = Alert.objects.filter(workspace_id=workspace_id,is_resolved=False).count()
+
+        anomaly_count = Anomaly.objects.filter(workspace_id=workspace_id).count()
+
+        risk_prediction = RiskPrediction.objects.filter(workspace_id=workspace_id).order_by("-created_at").first()
+
+
+        return Response({
+
+            "latest_rca":RootCauseAnalysisSerializer(latest_rca).data
+
+            if latest_rca
+
+            else None,
+
+
+            "health_score":HealthScoreSerializer(latest_health_score).data
+
+            if latest_health_score
+
+            else None,
+
+
+            "recommendations":RecommendationSerializer(recommendations,many=True).data,
+
+
+            "recent_anomalies":AnomalySerializer(anomalies,many=True).data,
+
+
+            "top_insights":RCAInsightSerializer(insights,many=True).data,
+
+
+            "alerts_count":alerts_count,
+
+
+            "anomaly_count":anomaly_count,
+
+
+            "risk_prediction":RiskPredictionSerializer(risk_prediction).data
+
+            if risk_prediction
+
+            else None
+
+        })
+
+class AITrendView(APIView):
+
+    def get(self, request):
+
+        workspace_id = request.GET.get("workspace")
+
+        insights = (RCAInsight.objects.filter(workspace_id=workspace_id).order_by("-occurrence_count"))
+
+        serializer = RCAInsightSerializer(insights,many=True)
+
+        return Response(serializer.data)
+
+class RiskPredictionView(APIView):
+
+    def get(self, request):
+
+        workspace_id = request.GET.get("workspace")
+
+        predictions = (RiskPrediction.objects.filter(workspace_id=workspace_id).order_by("-risk_score"))
+
+        serializer = RiskPredictionSerializer(predictions,many=True)
+
+        return Response(serializer.data)

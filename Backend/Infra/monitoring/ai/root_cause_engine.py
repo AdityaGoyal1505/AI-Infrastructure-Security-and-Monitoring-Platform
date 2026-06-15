@@ -1,10 +1,15 @@
 import json
 
+from monitoring.models import (
+    Alert,
+    Correlation,
+    HealthScore,
+    Anomaly,
+    RootCauseAnalysis
+)
 from .openai_client import ask_openai
 
 from .prompt_builder import build_root_cause_prompt
-
-from monitoring.models import RootCauseAnalysis,Alert,Correlation,HealthScore
 
 
 def generate_root_cause(workspace,node_id):
@@ -16,8 +21,7 @@ def generate_root_cause(workspace,node_id):
             node_id=node_id
         )
         .order_by("-created_at")[:10]
-        .values_list("title",flat=True
-)
+        .values_list("title",flat=True)
     )
 
     correlations = list(
@@ -30,23 +34,25 @@ def generate_root_cause(workspace,node_id):
         .values_list("correlation_type",flat=True)
     )
 
-    health = HealthScore.objects.filter(
+    anomalies = list(
 
-        workspace=workspace,
+        Anomaly.objects.filter(
+            workspace=workspace,
+            node_id=node_id
+        )
+        .order_by("-created_at")[:10]
+        .values("metric_name","observed_value","baseline_value")
+    )
 
-        node_id=node_id
-
-    ).first()
+    health = HealthScore.objects.filter(workspace=workspace,node_id=node_id).first()
 
     context = {
 
-        "node_id": node_id,
-
+        "node_id":node_id,
         "health_score":health.score if health else 100,
-
-        "alerts": alerts,
-
-        "correlations": correlations
+        "alerts":alerts,
+        "correlations":correlations,
+        "anomalies":anomalies
     }
 
     prompt = build_root_cause_prompt(context)
@@ -55,21 +61,14 @@ def generate_root_cause(workspace,node_id):
 
     data = json.loads(response)
 
-    RootCauseAnalysis.objects.create(
-
+    rca = RootCauseAnalysis.objects.create(
         workspace=workspace,
-
         node_id=node_id,
-
         root_cause=data["root_cause"],
-
         summary=data["summary"],
-
         confidence=data["confidence"],
-
         recommendations=data["recommendations"],
-
         raw_response=data
     )
 
-    return data
+    return rca

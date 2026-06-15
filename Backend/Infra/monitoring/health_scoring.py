@@ -1,8 +1,8 @@
-from Backend.Infra.monitoring.tasks import generate_root_cause_task
-
 from .models import Alert,HealthScore
 
 def calculate_health_score(workspace,node_id,metadata):
+
+    from .tasks import generate_root_cause_task
 
     score = 100
 
@@ -116,11 +116,6 @@ def calculate_health_score(workspace,node_id,metadata):
     )
         
     if score < 50:
-        generate_root_cause_task.delay(
-
-            workspace.id,
-
-            node_id
-        )
+        generate_root_cause_task.delay(workspace.id,node_id)
     
     return score

@@ -13,9 +13,7 @@ COOLDOWN_MINUTES = 5
 
 def evaluate_rules(workspace,node_id,metadata,event=None):
 
-    active_rules = Rule.objects.filter(
-        is_active=True
-    )
+    active_rules = Rule.objects.filter(is_active=True)
 
     for rule in active_rules:
 

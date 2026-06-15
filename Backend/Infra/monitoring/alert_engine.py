@@ -16,8 +16,7 @@ def create_rule_alert(workspace,rule_match):
 
         metadata={
 
-            "value":
-            rule_match.observed_value
+            "value":rule_match.observed_value
         }
     )
 
@@ -37,13 +36,10 @@ def create_anomaly_alert(workspace,anomaly):
 
         metadata={
 
-            "baseline":
-            anomaly.baseline_value,
+            "baseline":anomaly.baseline_value,
 
-            "observed":
-            anomaly.observed_value,
+            "observed":anomaly.observed_value,
 
-            "score":
-            anomaly.anomaly_score
+            "score":anomaly.anomaly_score
         }
     )
