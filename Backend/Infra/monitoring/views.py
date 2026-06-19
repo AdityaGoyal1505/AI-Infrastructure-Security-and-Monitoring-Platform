@@ -188,7 +188,6 @@ class WorkspaceSetupView(APIView):
 
             status=status.HTTP_200_OK
         )
-
 class DownloadAgentView(APIView):
 
     permission_classes = [IsAuthenticated]
@@ -196,15 +195,22 @@ class DownloadAgentView(APIView):
     def get(self, request, workspace_id):
 
         workspace = get_object_or_404(
+
             Workspace,
+
             id=workspace_id,
+
             user=request.user
+
         )
-        workspace = get_object_or_404(
-            Workspace,
-            id=workspace_id
+
+
+        base_dir = os.path.dirname(
+
+            settings.BASE_DIR
+
         )
-        base_dir = os.path.dirname(settings.BASE_DIR)
+
 
         agent_path = os.path.join(
 
@@ -213,7 +219,20 @@ class DownloadAgentView(APIView):
             "telemetry-agent",
 
             "monitoring-agent.zip"
+
         )
+
+
+        print("Agent Path :", agent_path)
+
+        print(
+
+            "Exists :",
+
+            os.path.exists(agent_path)
+
+        )
+
 
         if not os.path.exists(agent_path):
 
@@ -221,22 +240,46 @@ class DownloadAgentView(APIView):
 
                 {
 
-                    "error":"Agent package not found"
+                    "error":
+
+                    "Agent package not found"
 
                 },
 
                 status=404
+
             )
 
-        return FileResponse(
 
-            open(agent_path, "rb"),
+        response = FileResponse(
+
+            open(
+
+                agent_path,
+
+                "rb"
+
+            ),
 
             as_attachment=True,
 
-            filename="monitoring-agent.zip"
+            filename="monitoring-agent.zip",
+
+            content_type="application/zip"
+
         )
 
+
+        response["Content-Disposition"] = (
+
+            'attachment; '
+
+            'filename="monitoring-agent.zip"'
+
+        )
+
+
+        return response
 class EventIngestView(APIView):
 # ac5b2164-c5a3-4ff8-8806-9621cc78807e
     authentication_classes = []
@@ -379,16 +422,21 @@ class AIInsightsView(APIView):
 
         latest_rca = RootCauseAnalysis.objects.filter(workspace_id=workspace_id).order_by("-created_at").first()
 
-
         latest_health_score = HealthScore.objects.filter(workspace_id=workspace_id).order_by("-updated_at").first()
 
         recommendations = Recommendation.objects.filter(workspace_id=workspace_id).order_by("-created_at")[:5]
 
         anomalies = Anomaly.objects.filter(workspace_id=workspace_id).order_by("-created_at")[:10]
 
-        insights = RCAInsight.objects.filter(workspace_id=workspace_id).order_by("-occurrence_count")[:5]
+        insights = RCAInsight.objects.filter(workspace_id=workspace_id).order_by("-occurrence_count")[:2]
 
-        alerts_count = Alert.objects.filter(workspace_id=workspace_id,is_resolved=False).count()
+        alerts_count = Alert.objects.filter(
+
+            workspace_id=workspace_id,
+
+            status="OPEN"
+
+        ).count()
 
         anomaly_count = Anomaly.objects.filter(workspace_id=workspace_id).count()
 
@@ -445,6 +493,7 @@ class AITrendView(APIView):
         serializer = RCAInsightSerializer(insights,many=True)
 
         return Response(serializer.data)
+from monitoring.models import *
 
 class RiskPredictionView(APIView):
 
