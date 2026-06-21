@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'monitoring',
     'corsheaders',
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -175,6 +176,7 @@ REST_FRAMEWORK = {
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    "DEFAULT_SCHEMA_CLASS":"drf_spectacular.openapi.AutoSchema"
 }
 
 SIMPLE_JWT = {
@@ -190,6 +192,26 @@ SIMPLE_JWT = {
             'REFRESH_TOKEN_LIFETIME_DAYS'
         )
     ),
+}
+
+SPECTACULAR_SETTINGS = {
+
+    "TITLE":
+
+    "InfraMind API",
+
+    "DESCRIPTION":
+
+    "AI Powered Infrastructure Monitoring Platform",
+
+    "VERSION":
+
+    "1.0.0",
+
+    "SERVE_INCLUDE_SCHEMA":
+
+    False,
+
 }
 
 DEFAULT_EVENT_BATCH_SIZE = env.int(

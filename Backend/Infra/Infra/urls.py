@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin #type: ignore
 
 from django.urls import path,include #type: ignore
-
+from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView,SpectacularRedocView #type:ignore
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView #type: ignore
 
 urlpatterns = [
@@ -29,4 +29,11 @@ urlpatterns = [
     path('api/token/',TokenObtainPairView.as_view()),
 
     path('api/token/refresh/',TokenRefreshView.as_view()),
+
+    path("api/schema/",SpectacularAPIView.as_view(),name="schema"),
+
+    path("api/swagger/",SpectacularSwaggerView.as_view(url_name="schema"),name="swagger-ui"),
+
+    path("api/redoc/",SpectacularRedocView.as_view(url_name="schema"),name="redoc"),
+
 ]
