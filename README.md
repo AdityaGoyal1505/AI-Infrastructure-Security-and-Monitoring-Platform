@@ -41,7 +41,22 @@ Applications / Servers
           ▼
     React Dashboard
 ```
+---
 
+## 🏗️ User Architecture
+
+A high-level view of how the main pieces fit together:
+
+```mermaid
+flowchart TD
+    User["👤 User / Browser"]
+    FE["🖼️ React Frontend"]
+    User --> FE
+    DB[("🗄️ Redis")]
+    FE --> DB
+    EXT0["🔌 OpenAI"]
+    DB --> EXT0
+```
 ---
 
 ## ✨ Features
@@ -110,6 +125,42 @@ Applications / Servers
 * psutil
 * watchdog
 * requests
+
+---
+## 🚀 Available Scripts
+
+- **dev** — `npm run dev`
+- **build** — `npm run build`
+- **lint** — `npm run lint`
+- **preview** — `npm run preview`
+
+## 📁 Project Structure
+
+```
+.
+├── Backend
+│   ├── Infra
+│   │   ├── Dockerfile
+│   │   ├── Infra
+│   │   ├── manage.py
+│   │   ├── monitoring   
+│   │   └── requirements.txt
+│   ├── docker-compose.yml
+│   ├── requirements.txt
+│   └── telemetry-agent
+│       └── monitoring-agent.zip
+├── Frontend
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── public
+│   ├── src
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+└── requirements.txt
+```
 
 ---
 
