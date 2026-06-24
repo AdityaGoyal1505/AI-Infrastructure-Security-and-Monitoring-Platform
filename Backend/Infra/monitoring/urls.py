@@ -12,7 +12,9 @@ from .views import (
     WorkspaceListCreateView,
     WorkspaceDetailView,
     WorkspaceSetupView,
-    DownloadAgentView
+    DownloadAgentView,
+    AIChatView,
+    CookieTokenRefreshView
 )
 
 urlpatterns = [
@@ -82,22 +84,24 @@ urlpatterns = [
     ),
 
     path(
-
         "workspaces/<int:workspace_id>/setup/",
-
         WorkspaceSetupView.as_view(),
-
         name="workspace-setup"
-
     ),
 
     path(
-
         "workspaces/<int:workspace_id>/agent/",
-
         DownloadAgentView.as_view(),
-
         name="download-agent"
+    ),
 
+    path(
+        "ai/chat/",
+        AIChatView.as_view()
+    ),
+
+    path(
+        "auth/refresh/",
+        CookieTokenRefreshView.as_view()
     ),
 ]

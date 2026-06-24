@@ -8,12 +8,57 @@ from monitoring.models import (
     RootCauseAnalysis
 )
 from .openai_client import ask_openai
-
+from .utils import get_health_bucket
 from .prompt_builder import build_root_cause_prompt
 
 
 def generate_root_cause(workspace,node_id):
 
+    health = HealthScore.objects.filter(
+        workspace=workspace,
+        node_id=node_id
+    ).first()
+
+    health_score = health.score if health else 100
+
+    current_bucket = get_health_bucket(health_score)
+
+    latest_rca = (
+
+        RootCauseAnalysis.objects.filter(
+            workspace=workspace,
+            node_id=node_id
+        ).order_by("-created_at").first()
+
+    )
+
+    if latest_rca:
+
+        previous_bucket = (
+
+            latest_rca.raw_response.get("bucket")
+
+            if latest_rca.raw_response
+
+            else None
+
+        )
+
+        if previous_bucket == current_bucket:
+
+            print(
+
+                f"[RCA] "
+
+                f"Skipping "
+
+                f"{node_id} "
+
+                f"(bucket unchanged)"
+
+            )
+
+            return latest_rca
     alerts = list(
 
         Alert.objects.filter(
@@ -49,7 +94,7 @@ def generate_root_cause(workspace,node_id):
     context = {
 
         "node_id":node_id,
-        "health_score":health.score if health else 100,
+        "health_score":health_score,
         "alerts":alerts,
         "correlations":correlations,
         "anomalies":anomalies
@@ -61,6 +106,8 @@ def generate_root_cause(workspace,node_id):
 
     data = json.loads(response)
 
+    data["bucket"]=current_bucket
+    
     rca = RootCauseAnalysis.objects.create(
         workspace=workspace,
         node_id=node_id,
@@ -70,5 +117,7 @@ def generate_root_cause(workspace,node_id):
         recommendations=data["recommendations"],
         raw_response=data
     )
+
+    
 
     return rca

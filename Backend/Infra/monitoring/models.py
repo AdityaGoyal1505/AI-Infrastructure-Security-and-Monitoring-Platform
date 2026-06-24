@@ -315,7 +315,7 @@ class RootCauseAnalysis(models.Model):
         )
 
 class Recommendation(models.Model):
-
+    PRIORITY_CHOISE=[("LOW","LOW"),("MEDIUM","MEDIUM"),("HIGH","HIGH"),("CRITICAL","CRITICAL")]
     workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
 
     node_id = models.CharField(max_length=255)
@@ -326,7 +326,7 @@ class Recommendation(models.Model):
 
     description = models.TextField()
 
-    priority = models.CharField(max_length=20,choices=[("LOW","LOW"),("MEDIUM","MEDIUM"),("HIGH","HIGH"),("CRITICAL","CRITICAL")])
+    priority = models.CharField(max_length=20,choices=PRIORITY_CHOISE)
 
     is_applied = models.BooleanField(default=False)
 

@@ -6,11 +6,16 @@ from .models import (
     Workspace,
     Event,
     NodeStatus,
-    User
+    User,
+    RCAInsight,
+    RootCauseAnalysis,
+    Recommendation,
+    Anomaly,
+    HealthScore,
+    RiskPrediction
 )
 
 User = get_user_model()
-from rest_framework import serializers
 from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
@@ -146,9 +151,6 @@ class RCASerializer(serializers.ModelSerializer):
         model = RootCauseAnalysis
 
         fields = "__all__"
-
-from .models import RCAInsight,RootCauseAnalysis,Recommendation,Anomaly,HealthScore,RiskPrediction
-
 
 class RCAInsightSerializer(serializers.ModelSerializer):
 

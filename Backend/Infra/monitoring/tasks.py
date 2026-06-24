@@ -1,9 +1,6 @@
 from celery import shared_task  # type: ignore
-
 from .services import process_event
-
 from .models import Workspace,RootCauseAnalysis
-
 from .ai.root_cause_engine import generate_root_cause
 from .ai.recommendation_engine import store_recommendations
 from .ai.trend_engine import generate_rca_trends,generate_node_trends,generate_correlation_trends

@@ -151,17 +151,11 @@ REDIS_HOST = env('REDIS_HOST')
 
 REDIS_PORT = env('REDIS_PORT')
 
-CELERY_BROKER_URL = os.getenv(
-    "REDIS_URL"
-)
+CELERY_BROKER_URL = os.getenv("REDIS_URL")
 
-CELERY_RESULT_BACKEND = os.getenv(
-    "REDIS_URL"
-)
+CELERY_RESULT_BACKEND = os.getenv("REDIS_URL")
 
-CELERY_ACCEPT_CONTENT = [
-    "json"
-]
+CELERY_ACCEPT_CONTENT = ["json"]
 
 CELERY_TASK_SERIALIZER = "json"
 
@@ -169,15 +163,31 @@ CELERY_RESULT_SERIALIZER = "json"
 
 CELERY_TIMEZONE = "UTC"
 
+# REST_FRAMEWORK = {
+
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#         "monitoring.authentication.CookieJWTAuthentication"
+#     ),
+#     "DEFAULT_SCHEMA_CLASS":"drf_spectacular.openapi.AutoSchema"
+# }
 
 REST_FRAMEWORK = {
 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    "DEFAULT_AUTHENTICATION_CLASSES": [
 
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    "DEFAULT_SCHEMA_CLASS":"drf_spectacular.openapi.AutoSchema"
+        "monitoring.authentication.CookieJWTAuthentication",
+
+    ],
+
+    "DEFAULT_PERMISSION_CLASSES": [
+
+        "rest_framework.permissions.IsAuthenticated",
+
+    ],
 }
+
 
 SIMPLE_JWT = {
 
@@ -193,6 +203,18 @@ SIMPLE_JWT = {
         )
     ),
 }
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 SPECTACULAR_SETTINGS = {
 
@@ -214,18 +236,10 @@ SPECTACULAR_SETTINGS = {
 
 }
 
-DEFAULT_EVENT_BATCH_SIZE = env.int(
-    'DEFAULT_EVENT_BATCH_SIZE'
-)
+DEFAULT_EVENT_BATCH_SIZE = env.int('DEFAULT_EVENT_BATCH_SIZE')
+MAX_LOG_SIZE = env.int('MAX_LOG_SIZE')
 
-MAX_LOG_SIZE = env.int(
-    'MAX_LOG_SIZE'
-)
+ANOMALY_THRESHOLD = env.float('ANOMALY_THRESHOLD')
 
-ANOMALY_THRESHOLD = env.float(
-    'ANOMALY_THRESHOLD'
-)
-
-OPENAI_API_KEY = os.getenv(
-    "OPENAI_API_KEY"
-)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")

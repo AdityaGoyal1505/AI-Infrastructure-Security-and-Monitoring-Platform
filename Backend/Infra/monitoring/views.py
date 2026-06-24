@@ -1,29 +1,30 @@
+import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from monitoring.models import RootCauseAnalysis,Recommendation
-from .models import Workspace
 from .tasks import process_event_task
-from .models import RCAInsight
-from .serializers import RCAInsightSerializer,WorkspaceSetupSerializer
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.http import FileResponse
 from django.conf import settings
-import os
 from django.shortcuts import get_object_or_404
-
 from rest_framework_simplejwt.tokens import RefreshToken #type:ignore
-
-from .models import Workspace
 from .serializers import (
+    RootCauseAnalysisSerializer,
+    RecommendationSerializer,
+    HealthScoreSerializer,
+    AnomalySerializer,
+    RCAInsightSerializer,
+    RiskPredictionSerializer,
     RegisterSerializer,
     LoginSerializer,
     UserSerializer,
     WorkspaceSerializer,
-    WorkspaceCreateSerializer
+    WorkspaceCreateSerializer,
+    WorkspaceSetupSerializer
 )
+from monitoring.models import *
+
+from .ai.chatbot import ask_inframind
 
 class RegisterView(APIView):
 
@@ -48,6 +49,11 @@ class RegisterView(APIView):
 
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken #type:ignore
+from rest_framework_simplejwt.exceptions import TokenError #type:ignore
+
 class LoginView(APIView):
 
     authentication_classes = []
@@ -59,21 +65,151 @@ class LoginView(APIView):
 
         if not serializer.is_valid():
 
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         user = serializer.validated_data["user"]
 
         refresh = RefreshToken.for_user(user)
 
-        return Response(
+        access_token = str(refresh.access_token)
+
+        refresh_token = str(refresh)
+
+        response = Response(
+
             {
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
                 "user": UserSerializer(user).data
             },
+
             status=status.HTTP_200_OK
         )
 
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="None"   # change
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=True,
+            samesite="None"   # change
+        )
+
+        return response
+    
+class LogoutView(APIView):
+
+    def post(self, request):
+
+        response = Response(
+
+            {"message": "Logged out successfully"},
+
+            status=status.HTTP_200_OK
+        )
+
+        response.delete_cookie("access_token")
+
+        response.delete_cookie("refresh_token")
+
+        return response
+    
+class CookieTokenRefreshView(APIView):
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+
+        refresh_token = request.COOKIES.get(
+
+            "refresh_token"
+
+        )
+
+        if not refresh_token:
+
+            return Response(
+
+                {
+
+                    "detail":
+
+                    "Refresh token missing"
+
+                },
+
+                status=401
+
+            )
+
+        try:
+
+            refresh = RefreshToken(
+
+                refresh_token
+
+            )
+
+            access_token = str(
+
+                refresh.access_token
+
+            )
+
+            response = Response(
+
+                {
+
+                    "message":
+
+                    "Token refreshed"
+
+                }
+
+            )
+
+            response.set_cookie(
+
+                key="access_token",
+
+                value=access_token,
+
+                httponly=True,
+
+                secure=False,
+
+                samesite="Lax",
+
+                max_age=60 * 60
+
+            )
+
+            return response
+
+        except TokenError:
+
+            return Response(
+
+                {
+
+                    "detail":
+
+                    "Invalid refresh token"
+
+                },
+
+                status=401
+
+            )
+        
 class CurrentUserView(APIView):
 
     permission_classes = [IsAuthenticated]
@@ -382,25 +518,6 @@ class BatchEventIngestView(APIView):
 
             status=202
         )
-    
-from .models import (
-    RootCauseAnalysis,
-    Recommendation,
-    HealthScore,
-    Anomaly,
-    RCAInsight,
-    RiskPrediction,
-    Alert
-)
-
-from .serializers import (
-    RootCauseAnalysisSerializer,
-    RecommendationSerializer,
-    HealthScoreSerializer,
-    AnomalySerializer,
-    RCAInsightSerializer,
-    RiskPredictionSerializer
-)
 
 class AIInsightsView(APIView):
 
@@ -493,7 +610,6 @@ class AITrendView(APIView):
         serializer = RCAInsightSerializer(insights,many=True)
 
         return Response(serializer.data)
-from monitoring.models import *
 
 class RiskPredictionView(APIView):
 
@@ -506,3 +622,55 @@ class RiskPredictionView(APIView):
         serializer = RiskPredictionSerializer(predictions,many=True)
 
         return Response(serializer.data)
+
+class AIChatView(APIView):
+
+    def post(self,request):
+
+        workspace_id = request.data.get("workspace")
+
+        question = request.data.get("question")
+
+
+        if not workspace_id:
+
+            return Response(
+
+                {
+
+                    "error":"workspace required"
+
+                },
+
+                status=400
+
+            )
+
+
+        if not question:
+
+            return Response(
+
+                {
+
+                    "error":"question required"
+
+                },
+
+                status=400
+
+            )
+
+
+        answer = ask_inframind(workspace_id,question)
+
+
+        return Response(
+
+            {
+
+                "answer":answer
+
+            }
+
+        )

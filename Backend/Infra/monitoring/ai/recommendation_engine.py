@@ -36,7 +36,29 @@ def generate_recommendations(root_cause,summary):
     return json.loads(response)
 
 def store_recommendations(workspace,node_id,rca):
+    existing = Recommendation.objects.filter(
 
+        workspace=workspace,
+
+        node_id=node_id,
+
+        root_cause_analysis=rca
+
+    )
+
+    if existing.exists():
+
+        print(
+
+            f"[RECOMMENDATION] "
+
+            f"Skipping "
+
+            f"{node_id}"
+
+        )
+
+        return
     result = generate_recommendations(rca.root_cause,rca.summary)
 
     for item in result["recommendations"]:
