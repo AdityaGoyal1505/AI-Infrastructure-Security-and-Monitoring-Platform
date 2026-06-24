@@ -159,7 +159,7 @@ from the dashboard.
 
 Extract on the target machine.
 
-### 3. Configure API Key
+### 3. Configure API Key into JSON file
 
 ```env
 API_KEY=your_workspace_api_key
@@ -186,6 +186,7 @@ Output:
 ```text
 dist/
 └── agent.exe
+└── config.json
 ```
 
 No Python installation is required on monitored machines.
