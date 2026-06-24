@@ -41,22 +41,7 @@ Applications / Servers
           ▼
     React Dashboard
 ```
----
 
-## 🏗️ User Architecture
-
-A high-level view of how the main pieces fit together:
-
-```mermaid
-flowchart TD
-    User["👤 User / Browser"]
-    FE["🖼️ React Frontend"]
-    User --> FE
-    DB[("🗄️ Redis")]
-    FE --> DB
-    EXT0["🔌 OpenAI"]
-    DB --> EXT0
-```
 ---
 
 ## ✨ Features
@@ -127,12 +112,15 @@ flowchart TD
 * requests
 
 ---
+
 ## 🚀 Available Scripts
 
 - **dev** — `npm run dev`
 - **build** — `npm run build`
 - **lint** — `npm run lint`
 - **preview** — `npm run preview`
+
+---
 
 ## 📁 Project Structure
 
