@@ -1,76 +1,52 @@
 # 🚀 AI-Powered Infrastructure Monitoring Platform
 
-An enterprise-grade Infrastructure Monitoring Platform inspired by Datadog and New Relic, built with Django, React, TypeScript, PostgreSQL, Redis, Celery, OpenAI, and Gemini.
+Enterprise-grade infrastructure observability platform inspired by Datadog and New Relic.
 
-The platform provides real-time infrastructure observability, agent-based telemetry collection, AI-powered Root Cause Analysis, risk prediction, intelligent recommendations, anomaly detection, incident management, and an AI Operations Assistant.
+Monitor servers, APIs, logs, and system health in real-time while leveraging AI-powered Root Cause Analysis, Risk Prediction, Recommendations, and Infrastructure Intelligence.
 
----
-
-# 🎯 Highlights
-
-✅ Agent-Based Monitoring Architecture
-
-✅ Real-Time Telemetry Collection
-
-✅ AI Root Cause Analysis (RCA)
-
-✅ AI Recommendations Engine
-
-✅ Infrastructure Risk Prediction
-
-✅ Anomaly Detection
-
-✅ Incident Management
-
-✅ Alert Correlation
-
-✅ AI Operations Assistant
-
-✅ Cookie-Based Authentication
-
-✅ Workspace Isolation
+Built with Django, React, TypeScript, PostgreSQL, Redis, Celery, OpenAI, and Gemini.
 
 ---
 
-# 🏗 Architecture
+## 🎯 Highlights
+
+* Agent-Based Monitoring Architecture
+* Real-Time Telemetry Collection
+* AI Root Cause Analysis
+* AI Recommendations Engine
+* Infrastructure Risk Prediction
+* Incident Management
+* Alert Correlation
+* AI Operations Assistant
+* Cookie-Based Authentication
+* Workspace Isolation
+
+---
+
+## 🏗 Architecture
 
 ```text
-┌─────────────────────┐
-│ Applications        │
-│ APIs                │
-│ Servers             │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Telemetry Agent     │
-│ (agent.exe)         │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Django Backend      │
-│ Event Pipeline      │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ AI Analytics Engine │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ React Dashboard     │
-└─────────────────────┘
+Applications / Servers
+          │
+          ▼
+   Telemetry Agent
+      (agent.exe)
+          │
+          ▼
+      Django API
+          │
+          ▼
+   AI Analytics Engine
+          │
+          ▼
+    React Dashboard
 ```
 
 ---
 
-# ✨ Core Capabilities
+## ✨ Features
 
-## Infrastructure Monitoring
-
-Real-time visibility into infrastructure health.
+### Infrastructure Monitoring
 
 * CPU Monitoring
 * Memory Monitoring
@@ -79,41 +55,33 @@ Real-time visibility into infrastructure health.
 * Process Monitoring
 * Service Health Tracking
 
-## Telemetry Collection
-
-Secure agent-based telemetry ingestion.
+### Telemetry Agent
 
 * Log Monitoring
 * API Monitoring
-* Heartbeat Monitoring
-* System Metrics
+* Heartbeat Generation
 * Event Batching
-* Secure Event Transmission
+* Secure Transmission
 
-## Alerting & Incident Management
-
-Automated incident lifecycle management.
+### Alerting & Incidents
 
 * Rule-Based Alerts
 * Alert Correlation
 * Severity Classification
-* Incident Creation
-* Incident Resolution Workflow
+* Incident Lifecycle Management
 
-## AI Operations
-
-Built-in infrastructure intelligence layer.
+### AI Operations
 
 * Root Cause Analysis
-* AI Recommendations
+* Recommendations Engine
 * Risk Prediction
-* AI Insights
+* Infrastructure Insights
 * Trend Analysis
-* Infrastructure Chat Assistant
+* AI Chat Assistant
 
 ---
 
-# 🛠 Technology Stack
+## 🛠 Tech Stack
 
 ### Backend
 
@@ -122,7 +90,6 @@ Built-in infrastructure intelligence layer.
 * PostgreSQL
 * Redis
 * Celery
-* Simple JWT
 
 ### Frontend
 
@@ -146,95 +113,27 @@ Built-in infrastructure intelligence layer.
 
 ---
 
-# ⚙ Backend Setup
+## ⚡ Quick Start
 
-## Clone Repository
-
-```bash
-git clone <repository-url>
-
-cd project
-```
-
-## Create Virtual Environment
-
-```bash
-python -m venv .venv
-```
-
-## Activate Environment
-
-### Windows
-
-```bash
-.venv\Scripts\activate
-```
-
-### Linux / Mac
-
-```bash
-source .venv/bin/activate
-```
-
-## Install Dependencies
+### Backend
 
 ```bash
 pip install -r requirements.txt
-```
 
-## Configure Environment
-
-Create a `.env` file.
-
-```env
-SECRET_KEY=your_secret_key
-
-DEBUG=True
-
-DATABASE_URL=postgresql://user:password@localhost:5432/database
-
-OPENAI_API_KEY=your_openai_key
-
-GEMINI_API_KEY=your_gemini_key
-
-ACCESS_TOKEN_LIFETIME_MINUTES=60
-
-REFRESH_TOKEN_LIFETIME_DAYS=7
-```
-
-## Run Migrations
-
-```bash
 python manage.py migrate
-```
 
-## Start Backend
-
-```bash
 python manage.py runserver
 ```
 
----
-
-# 🎨 Frontend Setup
-
-Install dependencies:
+### Frontend
 
 ```bash
 npm install
-```
 
-Start frontend:
-
-```bash
 npm run dev
 ```
 
----
-
-# 🔴 Redis Setup
-
-Start Redis server:
+### Redis
 
 ```bash
 redis-server
@@ -242,29 +141,13 @@ redis-server
 
 ---
 
-# 📡 Telemetry Agent
+## 📡 Agent Installation
 
-The Telemetry Agent is responsible for collecting telemetry from monitored systems and securely transmitting it to the backend.
+Deploy monitoring in under two minutes.
 
-### Responsibilities
+### 1. Download Agent
 
-* Log Monitoring
-* API Monitoring
-* Process Monitoring
-* System Metrics Collection
-* Heartbeat Generation
-* Event Batching
-* Secure Communication
-
----
-
-# 🚀 Agent Installation
-
-Deploy monitoring in under 2 minutes.
-
-### 1️⃣ Download Agent
-
-Download the latest:
+Download:
 
 ```text
 monitoring-agent.zip
@@ -272,61 +155,27 @@ monitoring-agent.zip
 
 from the dashboard.
 
-### 2️⃣ Extract Package
+### 2. Extract Package
 
-Extract the package on the target machine.
+Extract on the target machine.
 
-Example:
-
-```text
-C:\MonitoringAgent
-```
-
-or
-
-```text
-/opt/monitoring-agent
-```
-
-### 3️⃣ Configure Workspace API Key
-
-Copy the generated Workspace API Key from the dashboard.
-
-Add it to:
-
-config.json file
+### 3. Configure API Key
 
 ```env
 API_KEY=your_workspace_api_key
 ```
 
-### 4️⃣ Launch Agent
-
-Windows:
+### 4. Launch Agent
 
 ```bash
 agent.exe
 ```
 
-Linux:
-
-```bash
-./agent
-```
-
-The agent immediately begins:
-
-* Collecting system metrics
-* Monitoring APIs
-* Monitoring logs
-* Tracking processes
-* Sending telemetry securely
+The agent immediately begins collecting telemetry and transmitting monitoring events to the platform.
 
 ---
 
-# 📦 Building Agent Executable
-
-Generate a standalone executable:
+## 📦 Build Agent Executable
 
 ```bash
 pyinstaller --onefile agent.py
@@ -337,62 +186,33 @@ Output:
 ```text
 dist/
 └── agent.exe
-└── config.json
 ```
 
 No Python installation is required on monitored machines.
 
 ---
 
-# ▶ Running The Complete Platform
+## 🤖 AI Capabilities
 
-### Terminal 1
+### Root Cause Analysis
 
-```bash
-redis-server
-```
+Identifies probable causes behind infrastructure incidents.
 
-### Terminal 2
+### Recommendations Engine
 
-```bash
-python manage.py runserver
-```
+Generates remediation suggestions based on detected issues.
 
-### Terminal 3
+### Risk Prediction
 
-```bash
-npm run dev
-```
+Predicts infrastructure risks using telemetry patterns.
 
-### Terminal 4
+### Infrastructure Insights
 
-```bash
-agent.exe
-```
+Creates operational summaries and intelligence reports.
 
----
+### AI Operations Assistant
 
-# 🤖 AI Capabilities
-
-## Root Cause Analysis
-
-Automatically identifies probable causes behind infrastructure incidents.
-
-## AI Recommendations
-
-Generates actionable remediation suggestions.
-
-## Infrastructure Risk Prediction
-
-Predicts future operational risks using telemetry patterns.
-
-## AI Insights
-
-Creates operational summaries and infrastructure intelligence reports.
-
-## AI Operations Assistant
-
-Ask questions about:
+Interactive assistant capable of answering questions regarding:
 
 * Incidents
 * Alerts
@@ -404,7 +224,7 @@ Ask questions about:
 
 ---
 
-# 📈 Current Development Status
+## 📈 Project Status
 
 ### Completed
 
@@ -414,15 +234,15 @@ Ask questions about:
 * Event Ingestion Pipeline
 * Alert Engine
 * Incident Management
-* Root Cause Analysis
-* Recommendations Engine
-* Risk Prediction
+* AI Root Cause Analysis
+* AI Recommendations
+* AI Risk Prediction
 * AI Insights
 * AI Operations Assistant
 * Cookie-Based Authentication
 * API Documentation
 
-### Upcoming
+### Planned
 
 * Advanced Analytics Dashboard
 * OpenTelemetry Integration
@@ -432,6 +252,6 @@ Ask questions about:
 
 ---
 
-# 📄 License
+## 📄 License
 
-This project is built for educational, research, portfolio, and learning purposes.
+Built for educational, research, portfolio, and learning purposes.
