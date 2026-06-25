@@ -1,0 +1,87 @@
+.prediction-card {
+  padding: 32px;
+
+  border-radius: 24px;
+
+  background: linear-gradient(90deg, #111827, #1e1b4b, #111827);
+
+  border: 1px solid rgba(139, 92, 246, 0.15);
+
+  box-shadow: 0 0 35px rgba(139, 92, 246, 0.15);
+
+  margin-bottom: 28px;
+}
+
+.prediction-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.prediction-header h2 {
+  margin: 0;
+
+  color: white;
+}
+
+.prediction-info {
+  display: flex;
+
+  gap: 60px;
+
+  margin-bottom: 28px;
+}
+
+.prediction-info span {
+  color: #94a3b8;
+
+  font-size: 14px;
+}
+
+.prediction-info h3 {
+  color: white;
+
+  font-size: 24px;
+
+  margin-top: 8px;
+}
+
+.prediction-explanation h4 {
+  color: #a855f7;
+}
+
+.prediction-explanation p {
+  color: #cbd5e1;
+
+  line-height: 1.8;
+}
+
+.risk-badge {
+  padding: 8px 16px;
+
+  border-radius: 999px;
+
+  font-weight: 700;
+}
+
+.risk-badge.high {
+  background: rgba(239, 68, 68, 0.15);
+
+  color: #f87171;
+}
+
+.risk-badge.medium {
+  background: rgba(245, 158, 11, 0.15);
+
+  color: #fbbf24;
+}
+
+.risk-badge.low {
+  background: rgba(16, 185, 129, 0.15);
+
+  color: #34d399;
+}

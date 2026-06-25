@@ -1,0 +1,57 @@
+.app-layout {
+  display: flex;
+
+  min-height: 100vh;
+
+  background: var(--bg-primary);
+}
+
+.page-container {
+  flex: 1;
+
+  padding: 24px;
+
+  overflow-x: hidden;
+}
+
+.page-title {
+  font-size: 28px;
+
+  font-weight: 700;
+
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--bg-card);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+
+  transition: var(--transition);
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+
+  box-shadow: var(--shadow-md);
+}
+
+.primary-btn {
+  background: var(--primary);
+
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: var(--radius-md);
+
+  transition: var(--transition);
+}
+
+.primary-btn:hover {
+  background: var(--primary-hover);
+}

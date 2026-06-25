@@ -1,0 +1,47 @@
+.danger-zone {
+  background: rgba(127, 29, 29, 0.2);
+
+  border: 1px solid rgba(239, 68, 68, 0.2);
+
+  padding: 32px;
+
+  border-radius: 24px;
+
+  margin-bottom: 28px;
+}
+
+.danger-zone h2 {
+  margin: 0;
+
+  color: #f87171;
+}
+
+.danger-zone p {
+  margin-top: 16px;
+
+  color: #cbd5e1;
+}
+
+.danger-zone button {
+  margin-top: 24px;
+
+  padding: 14px 22px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #dc2626;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.danger-zone button:hover {
+  transform: translateY(-2px);
+}

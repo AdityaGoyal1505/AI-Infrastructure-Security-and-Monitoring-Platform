@@ -1,0 +1,34 @@
+.main-layout {
+  display: flex;
+
+  min-height: 100vh;
+
+  background: var(--bg-primary);
+}
+
+.main-content {
+  flex: 1;
+
+  /* margin-left: 250px; */
+
+  min-height: 100vh;
+
+  padding: 0;
+  display: flex;
+
+  flex-direction: column;
+}
+
+.main-content.collapsed {
+  margin-left: 92px;
+}
+
+.page-content {
+  flex: 1;
+
+  padding: 10px;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+}

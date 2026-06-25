@@ -1,0 +1,19 @@
+:root {
+  --bg-primary: #08101f;
+
+  --health-gradient: linear-gradient(135deg, #0f766e, #14b8a6);
+
+  --risk-gradient: linear-gradient(135deg, #6d28d9, #8b5cf6);
+
+  --recommendation-gradient: linear-gradient(135deg, #1d4ed8, #3b82f6);
+
+  --anomaly-gradient: linear-gradient(135deg, #b91c1c, #ef4444);
+
+  --ai-gradient: linear-gradient(135deg, #c2410c, #fb923c);
+
+  --card-dark: #131a29;
+
+  --text-primary: #ffffff;
+
+  --text-secondary: #cbd5e1;
+}

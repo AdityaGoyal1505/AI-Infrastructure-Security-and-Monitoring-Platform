@@ -1,0 +1,106 @@
+.rca-card {
+  background: #0f172a;
+
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+  /* border:
+
+1px solid
+
+rgba(
+
+255,
+
+255,
+
+255,
+
+0.05
+
+); */
+  border-left: 5px solid #3b82f6;
+  border-radius: 24px;
+
+  padding: 32px;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+  transition: 0.4s;
+}
+
+.rca-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 0 40px rgba(59, 130, 246, 0.25),
+    0 15px 40px rgba(0, 0, 0, 0.35);
+}
+
+.rca-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.rca-label {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #3b82f6;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+.rca-header h2 {
+  margin-top: 8px;
+
+  margin-bottom: 0;
+
+  font-size: 28px;
+
+  font-weight: 700;
+
+  color: #f8fafc;
+}
+
+.confidence-badge {
+  padding: 12px 18px;
+
+  border-radius: 999px;
+
+  background: rgba(59, 130, 246, 0.15);
+
+  color: #60a5fa;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+.rca-content h3 {
+  font-size: 18px;
+
+  font-weight: 600;
+
+  color: #f8fafc;
+
+  margin-bottom: 10px;
+}
+
+.rca-content p {
+  font-size: 15px;
+
+  line-height: 1.8;
+
+  color: #94a3b8;
+
+  margin-bottom: 30px;
+}

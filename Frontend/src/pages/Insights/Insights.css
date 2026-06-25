@@ -1,0 +1,23 @@
+.insights-page {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 28px;
+
+  padding: 32px;
+}
+
+.insight-loading {
+  height: 60vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 22px;
+
+  color: #94a3b8;
+}

@@ -1,0 +1,47 @@
+# Core
+react
+react-dom
+typescript
+vite
+
+# Routing
+react-router-dom
+
+# API Communication
+axios
+
+# Flow Builder
+reactflow
+
+# Charts & Visualization
+recharts
+
+# UI Utilities
+clsx
+
+# Icons
+lucide-react
+
+# Forms
+react-hook-form
+
+# Notifications
+react-hot-toast
+
+# Date Handling
+date-fns
+
+# State Management
+zustand
+
+# Styling
+sass
+
+# Development
+@types/react
+@types/react-dom
+@vitejs/plugin-react
+eslint
+eslint-plugin-react-hooks
+eslint-plugin-react-refresh
+typescript-eslint
