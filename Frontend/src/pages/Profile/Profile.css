@@ -1,0 +1,188 @@
+.profile-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at top,
+
+      rgba(139, 92, 246, 0.08),
+      transparent 35%
+    ),
+    #020817;
+}
+
+.profile-topbar {
+  height: 72px;
+
+  padding: 0 36px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.top-btn {
+  background: none;
+
+  border: none;
+
+  color: #cbd5e1;
+
+  font-size: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.log-btn {
+  color: red;
+  border: 1px solid red;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.top-btn:hover {
+  color: #a855f7;
+}
+
+.log-btn:hover {
+  color: #cbd5e1;
+  border: 1px solid #cbd5e1;
+}
+
+.profile-header {
+  text-align: center;
+
+  padding-top: 60px;
+}
+
+.profile-avatar {
+  width: 110px;
+
+  height: 110px;
+
+  margin: auto;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 48px;
+
+  font-weight: 700;
+
+  color: white;
+
+  background: linear-gradient(135deg, #a855f7, #3b82f6);
+
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.35);
+}
+
+.profile-header h1 {
+  margin-top: 28px;
+
+  color: white;
+
+  font-size: 48px;
+
+  font-weight: 700;
+}
+
+.profile-header p {
+  margin-top: 10px;
+
+  color: #94a3b8;
+
+  font-size: 18px;
+}
+
+.profile-divider {
+  width: 70px;
+
+  height: 2px;
+
+  margin: 30px auto;
+
+  border-radius: 20px;
+
+  background: linear-gradient(90deg, transparent, #a855f7, transparent);
+}
+
+.profile-info {
+  width: 75%;
+
+  max-width: 900px;
+
+  margin: auto;
+
+  margin-top: 30px;
+}
+
+.info-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 26px 0;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  color: #94a3b8;
+
+  font-size: 15px;
+}
+
+.info-left svg {
+  color: #a855f7;
+}
+
+.info-right {
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .profile-info {
+    width: 90%;
+  }
+
+  .profile-header h1 {
+    font-size: 36px;
+  }
+
+  .info-row {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 14px;
+  }
+}

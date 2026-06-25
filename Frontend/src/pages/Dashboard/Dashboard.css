@@ -1,0 +1,64 @@
+.dashboard {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 28px;
+
+  padding: 32px;
+
+  min-height: 100%;
+}
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 24px;
+}
+
+.ai-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.4fr
+    1fr;
+
+  gap: 24px;
+
+  align-items: start;
+}
+
+.dashboard-loading,
+.dashboard-error {
+  height: 60vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 20px;
+
+  font-weight: 600;
+
+  color: #94a3b8;
+}
+
+@media (max-width: 1400px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ai-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

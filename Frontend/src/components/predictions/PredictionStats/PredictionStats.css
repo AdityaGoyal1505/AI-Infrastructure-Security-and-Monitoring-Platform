@@ -1,0 +1,47 @@
+.prediction-stats {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+
+  margin-bottom: 28px;
+}
+
+.prediction-stat-card {
+  padding: 28px;
+
+  border-radius: 22px;
+
+  color: white;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+}
+
+.prediction-stat-card p {
+  margin: 0;
+
+  font-size: 14px;
+
+  opacity: 0.85;
+}
+
+.prediction-stat-card h2 {
+  margin-top: 14px;
+
+  font-size: 38px;
+
+  font-weight: 700;
+}
+
+.risk {
+  background: linear-gradient(135deg, #5b21b6, #8b5cf6);
+}
+
+.nodes {
+  background: linear-gradient(135deg, #ea580c, #fb923c);
+}
+
+.level {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}

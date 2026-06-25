@@ -1,0 +1,61 @@
+.prediction-history {
+  background: #111827;
+
+  padding: 28px;
+
+  border-radius: 24px;
+}
+
+.prediction-history h2 {
+  color: white;
+
+  margin-bottom: 24px;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+
+  color: #94a3b8;
+
+  padding-bottom: 18px;
+}
+
+td {
+  padding: 18px 0;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  color: #f8fafc;
+}
+
+.history-badge {
+  padding: 6px 14px;
+
+  border-radius: 999px;
+
+  font-weight: 600;
+}
+
+.history-badge.high {
+  background: rgba(239, 68, 68, 0.15);
+
+  color: #f87171;
+}
+
+.history-badge.medium {
+  background: rgba(245, 158, 11, 0.15);
+
+  color: #fbbf24;
+}
+
+.history-badge.low {
+  background: rgba(16, 185, 129, 0.15);
+
+  color: #34d399;
+}

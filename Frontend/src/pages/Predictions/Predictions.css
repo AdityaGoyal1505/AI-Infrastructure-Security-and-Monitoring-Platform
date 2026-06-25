@@ -1,0 +1,46 @@
+.predictions-page {
+  width: 100%;
+
+  padding: 32px;
+}
+
+.predictions-header {
+  margin-bottom: 32px;
+}
+
+.predictions-header h1 {
+  margin: 0;
+
+  font-size: 38px;
+
+  font-weight: 800;
+
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.predictions-header p {
+  margin-top: 10px;
+
+  font-size: 15px;
+
+  color: #94a3b8;
+}
+
+.predictions-loading,
+.predictions-error {
+  height: 300px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 20px;
+
+  color: #94a3b8;
+}

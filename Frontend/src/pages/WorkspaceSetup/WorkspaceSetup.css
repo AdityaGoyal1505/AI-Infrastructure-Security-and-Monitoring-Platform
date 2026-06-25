@@ -1,0 +1,36 @@
+/* Workspace Setup Page Styles */
+.setup-page {
+  width: 100%;
+
+  padding: 32px;
+}
+
+.setup-header {
+  margin-bottom: 32px;
+}
+
+.setup-header h1 {
+  margin: 0;
+
+  font-size: 38px;
+
+  font-weight: 800;
+
+  background: linear-gradient(90deg, #a855f7, #3b82f6);
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.setup-header p {
+  margin-top: 12px;
+
+  color: #94a3b8;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+
+  max-width: 700px;
+}

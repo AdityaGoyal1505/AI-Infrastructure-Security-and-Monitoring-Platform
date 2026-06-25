@@ -1,0 +1,37 @@
+.workspace-info-card {
+  background: #111827;
+
+  padding: 32px;
+
+  border-radius: 24px;
+
+  margin-bottom: 28px;
+}
+
+.workspace-info-card h2 {
+  margin: 0 0 28px;
+
+  color: #f8fafc;
+}
+
+.workspace-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+}
+
+.workspace-grid span {
+  color: #94a3b8;
+
+  font-size: 14px;
+}
+
+.workspace-grid h3 {
+  margin-top: 10px;
+
+  font-size: 24px;
+
+  color: white;
+}
