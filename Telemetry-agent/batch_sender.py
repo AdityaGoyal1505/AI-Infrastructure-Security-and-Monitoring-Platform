@@ -18,6 +18,6 @@ def batch_sender_loop(api_key):
 
         if batch:
 
-            send_batch(BACKEND_URL,api_key,batch)
+            send_batch(api_key,batch)
 
         time.sleep(2)

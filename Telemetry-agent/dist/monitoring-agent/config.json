@@ -1,0 +1,33 @@
+{
+  "_comment": "Need to be filled by user with actual backend URL",
+
+  "api_key": "9786cb4d-92d4-46fd-9d17-4a1def3bd871",
+
+  "node_id": "local-node",
+
+  "poll_interval": 1,
+
+
+  "logs": [
+    {
+      "path": "C:\\Users\\adityagoyal\\Downloads\\logs\\redis.log",
+      "service": "redis"
+    },
+    {
+      "path": "C:\\Users\\adityagoyal\\Downloads\\logs\\celery.log",
+      "service": "celery"
+    },
+    {
+      "path": "C:\\Users\\adityagoyal\\Downloads\\logs\\django.log",
+      "service": "django"
+    },
+    {
+      "path": "C:\\Users\\adityagoyal\\Downloads\\logs\\postgres.log",
+      "service": "postgres"
+    },
+    {
+      "path": "C:\\Users\\adityagoyal\\Downloads\\logs\\react.log",
+      "service": "react"
+    }
+  ]
+}
