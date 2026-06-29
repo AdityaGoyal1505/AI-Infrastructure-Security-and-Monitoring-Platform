@@ -16,6 +16,24 @@ BASE_DIR = os.path.dirname(sys.executable) if getattr(sys,"frozen",False) else o
 
 CONFIG_PATH = os.path.join(BASE_DIR,"config.json")
 
+print("Frozen :", getattr(sys, "frozen", False))
+
+print("Executable :", sys.executable)
+
+print("BASE_DIR :", BASE_DIR)
+
+print("CONFIG_PATH :", CONFIG_PATH)
+
+print(
+
+    "CONFIG EXISTS :",
+
+    os.path.exists(CONFIG_PATH)
+
+)
+
+input("Press Enter...")
+
 with open(CONFIG_PATH,"r") as config_file:
 
     config = json.load(config_file)
@@ -79,7 +97,7 @@ if __name__ == "__main__":
 
                     log_config["path"],
 
-                    api_key
+                    # api_key
                 ),
 
                 daemon=True

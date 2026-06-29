@@ -3,7 +3,7 @@ import os
 
 def validate_config(config):
 
-    required_fields = ["backend_url","api_key","logs"]
+    required_fields = ["api_key","logs"]
 
     for field in required_fields:
 
