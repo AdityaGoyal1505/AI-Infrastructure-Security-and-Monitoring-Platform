@@ -25,23 +25,31 @@ Built with Django, React, TypeScript, PostgreSQL, Redis, Celery, OpenAI, and Gem
 
 ## 🏗 Architecture
 
-```text
-Applications / Servers
-          │
-          ▼
-   Telemetry Agent
-      (agent.exe)
-          │
-          ▼
-      Django API
-          │
-          ▼
-   AI Analytics Engine
-          │
-          ▼
-    React Dashboard
-```
+```mermaid
+flowchart TD
+    A["Applications / Servers"]
+    B["Telemetry Agent<br/>(agent.exe)"]
+    C["Django API"]
+    D["AI Analytics Engine"]
+    E["React Dashboard"]
 
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+
+    classDef app fill:#2563eb,stroke:#1e40af,color:#fff,stroke-width:2px;
+    classDef agent fill:#16a34a,stroke:#166534,color:#fff,stroke-width:2px;
+    classDef backend fill:#9333ea,stroke:#6b21a8,color:#fff,stroke-width:2px;
+    classDef ai fill:#ea580c,stroke:#9a3412,color:#fff,stroke-width:2px;
+    classDef dashboard fill:#0f766e,stroke:#115e59,color:#fff,stroke-width:2px;
+
+    class A app;
+    class B agent;
+    class C backend;
+    class D ai;
+    class E dashboard;
+```
 ---
 
 ## ✨ Features
