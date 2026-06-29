@@ -8,18 +8,9 @@ from monitoring.models import (
 
 def generate_correlation_trends():
 
-    RCAInsight.objects.filter(
-        insight_type="COMMON_CORRELATION"
-    ).delete()
+    RCAInsight.objects.filter(insight_type="COMMON_CORRELATION").delete()
 
-    correlations = list(
-        Correlation.objects.filter(
-            is_active=True
-        ).values_list(
-            "correlation_type",
-            flat=True
-        )
-    )
+    correlations = list(Correlation.objects.filter(is_active=True).values_list("correlation_type",flat=True))
 
     counts = Counter(correlations)
 
