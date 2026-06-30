@@ -34,7 +34,7 @@ const Sidebar = () => {
       path: `/workspaces/${id}/dashboard`,
     },
     {
-      title: "AI Insights",
+      title: "AI Analysis",
       icon: <Brain />,
       path: `/workspaces/${id}/insights`,
     },
@@ -48,7 +48,7 @@ const Sidebar = () => {
       icon: <ChartColumn />,
       path: `/workspaces/${id}/trends`,
     },
-    { title: "Setup", icon: <Settings />, path: `/workspaces/${id}/setup` },
+    { title: "Configuration", icon: <Settings />, path: `/workspaces/${id}/setup` },
   ];
 
   return (

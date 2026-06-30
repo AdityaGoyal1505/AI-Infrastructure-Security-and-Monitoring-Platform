@@ -5,8 +5,7 @@ import sys
 import subprocess
 
 def start_celery():
-
-    subprocess.Popen([sys.executable,"-m","celery","-A","Infra","worker","-l","info"])
+    subprocess.Popen([sys.executable,"-m","celery","-A","Infra","worker","--pool=solo","-l","info",])
 
 def main():
     """Run administrative tasks."""

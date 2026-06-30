@@ -122,13 +122,13 @@ const Features = () => {
           </p>
 
           <ul>
-            <li>AI Powered Analysis</li>
+            <li>Root Cause Analysis</li>
 
             <li>Confidence Score</li>
 
             <li>Failure Patterns</li>
 
-            <li>Recommendations</li>
+            <li>Recommended Actions</li>
           </ul>
         </div>
 
@@ -187,13 +187,11 @@ const Features = () => {
         </div>
       </section>
 
-      {/* AI RECOMMENDATIONS */}
-
-      <section className="feature-row reverse">
+      {/* AI RECOMMENDED ACTIONS */}
+      <section className="feature-section">
         <div className="feature-text">
-          <div className="feature-emoji">🤖</div>
-
-          <h2>AI Recommendations</h2>
+          <span className="feature-badge">ACTION</span>
+          <h2>AI Recommended Actions</h2>
 
           <p>
             Actionable insights generated automatically to resolve incidents

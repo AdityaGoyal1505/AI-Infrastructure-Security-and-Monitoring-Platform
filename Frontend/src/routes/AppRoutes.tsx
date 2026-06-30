@@ -20,15 +20,29 @@ import MainLayout from "../components/layout/MainLayout/MainLayout";
 import About from "../pages/About/About";
 import Features from "../pages/Features/Features";
 import ProtectedRoute from "./ProtectedRoute";
+import GuestRoute from "./GuestRoute";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/auth" replace />} />
+        {/* Default route redirects to auth/guest route checking */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
-        <Route path="/auth" element={<Auth />} />
+        {/* Public Routes (Only for unauthenticated users) */}
+        <Route
+          path="/auth"
+          element={
+            <GuestRoute>
+              <Auth />
+            </GuestRoute>
+          }
+        />
+        <Route path="/home" element={<Home />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/about" element={<About />} />
 
+        {/* Protected Routes (Only for authenticated users) */}
         <Route
           path="/workspaces"
           element={
@@ -37,7 +51,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/profile"
           element={
@@ -46,43 +59,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/features"
-          element={
-            <ProtectedRoute>
-              <Features />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/about"
-          element={
-            <ProtectedRoute>
-              <About />
-            </ProtectedRoute>
-          }
-        />
-
         <Route
           element={
             <ProtectedRoute>
@@ -101,7 +77,7 @@ const AppRoutes = () => {
           <Route path="/workspaces/:id/trends" element={<Trends />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/auth" replace />} />
+        <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </BrowserRouter>
   );

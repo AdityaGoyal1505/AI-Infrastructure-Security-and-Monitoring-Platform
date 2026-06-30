@@ -28,7 +28,7 @@ const services = [
   {
     name: "AI Health Engine",
 
-    description: "RCA + Risk + Recommendations active",
+    description: "RCA + Risk + Recommended Actions active",
   },
 ];
 

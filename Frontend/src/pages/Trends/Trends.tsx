@@ -1,25 +1,13 @@
+import React from "react";
 import "./Trends.css";
-
 import useTrends from "../../hooks/useTrends";
-
-import TopInsightCard from "../../components/trends/TopInsightCard/TopInsightCard";
-
-import OccurrenceChart from "../../components/trends/OccurrenceChart/OccurrenceChart";
-
-import TrendList from "../../components/trends/TrendList/TrendList";
-
-import TrendSummary from "../../components/trends/TrendSummary/TrendSummary";
+import ExecutiveSummary from "../../components/trends/ExecutiveSummary/ExecutiveSummary";
+import PatternDistributionChart from "../../components/trends/PatternDistributionChart/PatternDistributionChart";
+import TrendAnalyticsChart from "../../components/trends/TrendAnalyticsChart/TrendAnalyticsChart";
+import InfrastructureEventTimeline from "../../components/trends/InfrastructureEventTimeline/InfrastructureEventTimeline";
 
 const Trends = () => {
-  const {
-    data,
-
-    loading,
-
-    error,
-
-    topInsight,
-  } = useTrends();
+  const { loading, error, executiveMetrics, singleNode, charts, timeline } = useTrends();
 
   if (loading) {
     return <div className="trends-loading">Loading Trends...</div>;
@@ -33,20 +21,28 @@ const Trends = () => {
     <div className="trends-page">
       <div className="trends-header">
         <h1>AI Trends</h1>
-
         <p>
           Discover recurring patterns, monitor infrastructure behavior, and
           uncover hidden insights.
         </p>
       </div>
 
-      <TopInsightCard insight={topInsight} />
+      <ExecutiveSummary metrics={executiveMetrics} />
 
-      <OccurrenceChart trends={data} />
+      {charts && (
+        singleNode ? (
+          <TrendAnalyticsChart chartType="health" data={charts.health_score || charts.health_score_trend || []} />
+        ) : (
+          <TrendAnalyticsChart chartType="nodes" data={charts.top_affected_nodes || charts.anomalies || []} />
+        )
+      )}
 
-      <TrendList trends={data} />
+      {charts && charts.pattern_distribution && (
+        <PatternDistributionChart distribution={charts.pattern_distribution} />
+      )}
 
-      <TrendSummary topInsight={topInsight} />
+      <InfrastructureEventTimeline events={timeline || []} />
+
     </div>
   );
 };

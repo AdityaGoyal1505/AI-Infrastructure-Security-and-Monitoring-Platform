@@ -1,10 +1,11 @@
 from collections import Counter
-
+import json
 from monitoring.models import (
     RCAInsight,
     RootCauseAnalysis,
     Correlation
 )
+from .openai_client import ask_openai
 
 def generate_correlation_trends():
 
@@ -24,6 +25,9 @@ def generate_correlation_trends():
         if count < 1:
             continue
 
+        prompt = f"Summarize this infrastructure pattern: Correlation '{correlation_type}' occurred {count} times."
+        summary = ask_openai(prompt)
+
         RCAInsight.objects.create(
 
             workspace=first_correlation.workspace,
@@ -32,10 +36,7 @@ def generate_correlation_trends():
 
             title=correlation_type,
 
-            description=(
-                f"Occurred {count} times "
-                f"across monitored nodes"
-            ),
+            description=summary,
 
             occurrence_count=count
         )
@@ -58,6 +59,9 @@ def generate_rca_trends():
         if count < 2:
             continue
 
+        prompt = f"Summarize this root cause pattern: Root cause '{root_cause}' occurred {count} times."
+        summary = ask_openai(prompt)
+
         RCAInsight.objects.create(
 
             workspace=first_analysis,
@@ -66,11 +70,7 @@ def generate_rca_trends():
 
             title=root_cause,
 
-            description=(
-
-                f"Occurred "
-                f"{count} times"
-            ),
+            description=summary,
 
             occurrence_count=count
         )
@@ -98,6 +98,24 @@ def generate_node_trends():
         if count < 2:
             continue
 
+        prompt = f"""
+            Return the response as valid JSON only.
+
+            Summarize the following node-specific pattern:
+
+            Node: {node_id}
+            Root Cause: {root_cause}
+            Occurrences: {count}
+
+            Return JSON in this format:
+
+            {{
+                "summary": "..."
+            }}
+            """
+        response = ask_openai(prompt)
+
+        summary = json.loads(response)["summary"]
         RCAInsight.objects.create(
 
             workspace=analyses.first().workspace,
@@ -106,12 +124,7 @@ def generate_node_trends():
 
             title=node_id,
 
-            description=(
-
-                f"{root_cause} "
-                f"occurred "
-                f"{count} times"
-            ),
+            description=summary,
 
             occurrence_count=count
         )

@@ -3,8 +3,18 @@
 from datetime import datetime
 import re
 
-def parse_log(service_name, raw_log):
-
+def parse_log(service_name, raw_log, node_id=None):
+    # Load node_id from config if not supplied
+    if node_id is None:
+        import os, sys, json
+        BASE_DIR = os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.dirname(os.path.abspath(__file__))
+        CONFIG_PATH = os.path.join(BASE_DIR, "config.json")
+        try:
+            with open(CONFIG_PATH, "r") as cfg_file:
+                cfg = json.load(cfg_file)
+                node_id = cfg.get("node_id", "local-node")
+        except Exception:
+            node_id = "local-node"
     metadata = {"collected_at":str(datetime.utcnow())}
 
     event_type = "log"
@@ -42,7 +52,7 @@ def parse_log(service_name, raw_log):
 
     return {
 
-        "node_id":"local-node",
+        "node_id":node_id,
 
         "source_service":service_name,
 

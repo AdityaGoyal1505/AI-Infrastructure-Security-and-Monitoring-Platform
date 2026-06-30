@@ -42,17 +42,19 @@ validate_config(config)
 
 api_key = config["api_key"]
 
+node_id = config.get("node_id", "local-node")
 
-def metrics_loop():
+
+def metrics_loop(node_id):
 
     while True:
         try:
 
-            metrics_event = collect_system_metrics()
+            metrics_event = collect_system_metrics(node_id)
 
             event_queue.put(metrics_event)
 
-            process_event = collect_process_metrics()
+            process_event = collect_process_metrics(node_id)
 
             event_queue.put(process_event)
 
@@ -63,12 +65,12 @@ def metrics_loop():
         time.sleep(10)
 
 
-def heartbeat_loop():
+def heartbeat_loop(node_id):
 
     while True:
         try:
 
-            heartbeat = generate_heartbeat()
+            heartbeat = generate_heartbeat(node_id)
 
             event_queue.put(heartbeat)
 
@@ -97,6 +99,7 @@ if __name__ == "__main__":
 
                     log_config["path"],
 
+                    node_id
                     # api_key
                 ),
 
@@ -107,13 +110,13 @@ if __name__ == "__main__":
 
             threads.append(thread)
 
-    metrics_thread = threading.Thread(target=metrics_loop,daemon=True)
+    metrics_thread = threading.Thread(target=metrics_loop,args=(node_id,),daemon=True)
 
     metrics_thread.start()
 
     threads.append(metrics_thread)
 
-    heartbeat_thread = threading.Thread(target=heartbeat_loop,daemon=True)
+    heartbeat_thread = threading.Thread(target=heartbeat_loop,args=(node_id,),daemon=True)
 
     heartbeat_thread.start()
 

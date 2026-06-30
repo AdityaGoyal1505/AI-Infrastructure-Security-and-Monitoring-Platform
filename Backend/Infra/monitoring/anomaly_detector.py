@@ -1,4 +1,8 @@
+import logging
+import math
 from statistics import mean
+from datetime import datetime, timedelta
+from django.utils import timezone
 from .alert_engine import create_anomaly_alert
 from .models import Anomaly
 
@@ -43,27 +47,37 @@ def detect_anomaly(workspace,node_id,metric_name,value):
     anomaly_score = min(deviation/5,1.0)
 
     if deviation >= ANOMALY_THRESHOLD:
-
-        anomaly = Anomaly.objects.create(
-
-            workspace=workspace,
-
-            node_id=node_id,
-
-            metric_name=metric_name,
-
-            observed_value=value,
-
-            baseline_value=baseline,
-
-            anomaly_score=anomaly_score
+        # Check for recent existing anomaly for same node and metric
+        recent_anomaly = (
+            Anomaly.objects.filter(
+                workspace=workspace,
+                node_id=node_id,
+                metric_name=metric_name,
+                created_at__gte=timezone.now() - timedelta(minutes=5),
+            )
+            .order_by('-created_at')
+            .first()
         )
-        
-        create_anomaly_alert(workspace,anomaly)
+        if recent_anomaly:
+            # Update existing anomaly
+            recent_anomaly.observed_value = value
+            recent_anomaly.baseline_value = baseline
+            recent_anomaly.anomaly_score = anomaly_score
+            recent_anomaly.save()
+            anomaly = recent_anomaly
+        else:
+            # Create new anomaly
+            anomaly = Anomaly.objects.create(
+                workspace=workspace,
+                node_id=node_id,
+                metric_name=metric_name,
+                observed_value=value,
+                baseline_value=baseline,
+                anomaly_score=anomaly_score,
+            )
+        create_anomaly_alert(workspace, anomaly)
         print(
-            f"[ANOMALY] "
-            f"{metric_name} "
-            f"{value}"
+            f"[ANOMALY] {metric_name} {value}"
         )
 
 

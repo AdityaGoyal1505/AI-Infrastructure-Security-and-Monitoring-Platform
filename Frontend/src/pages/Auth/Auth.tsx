@@ -68,7 +68,7 @@ const Auth = () => {
           JSON.stringify(data.user),
         );
 
-        navigate("/home");
+        navigate("/workspaces");
       } else {
         if (formData.password !== formData.confirmPassword) {
           setError("Passwords do not match");
@@ -133,7 +133,7 @@ const Auth = () => {
         <h1>
           AI Infrastructure
           <br />
-          Intelligence
+          Analysis
         </h1>
 
         <div className="tagline">
@@ -151,7 +151,7 @@ const Auth = () => {
 
           <div>✓ Trend Analysis</div>
 
-          <div>✓ Actionable Recommendations</div>
+          <div>✓ Recommended Actions</div>
         </div>
       </div>
 

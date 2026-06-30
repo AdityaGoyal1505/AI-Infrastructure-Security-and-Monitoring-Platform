@@ -17,10 +17,10 @@ interface Props {
 const RecommendationList = ({ recommendations }: Props) => {
   return (
     <div className="recommendation-card">
-      <div className="recommendation-header">Recommendations</div>
+      <div className="recommendation-header">Recommended Actions</div>
 
       {recommendations.length === 0 ? (
-        <div className="empty-state">No recommendations available</div>
+        <div className="empty-state">No recommended actions available</div>
       ) : (
         recommendations.map((item) => (
           <div className="recommendation-item" key={item.id}>
