@@ -1,24 +1,25 @@
 from .models import Alert
 
 def create_rule_alert(workspace,rule_match):
-
-    Alert.objects.create(
-
+    existing = Alert.objects.filter(
         workspace=workspace,
+        node_id=workspace.node_id,
+        title=rule_match.rule.name,          # or alert title
+        status="OPEN"
+    ).first()
 
-        node_id=rule_match.node_id,
+    if not existing:
+        Alert.objects.create(
+            workspace=workspace,
+            node_id=workspace.node_id,
+            title=rule_match.rule.name,
+            severity=rule_match.rule.severity,
+            status="OPEN",
+            metadata={
 
-        title=rule_match.rule.name,
-
-        severity=rule_match.rule.severity,
-
-        source="RULE",
-
-        metadata={
-
-            "value":rule_match.observed_value
-        }
-    )
+                "value":rule_match.observed_value
+            }
+        )
 
 def create_anomaly_alert(workspace,anomaly):
 

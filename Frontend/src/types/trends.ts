@@ -12,4 +12,10 @@ export interface Trend {
   occurrence_count: number;
 
   created_at: string;
+
+  analytics?: {
+    most_affected_nodes: { node_id: string; count: number }[];
+    metric_drift: Record<string, number>;
+    overall_stability: number;
+  };
 }

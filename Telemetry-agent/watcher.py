@@ -9,11 +9,13 @@ from event_queue import event_queue
 
 class LogHandler(FileSystemEventHandler):
 
-    def __init__(self, service_name, file_path):
+    def __init__(self, service_name, file_path, node_id="local-node"):
 
         self.service_name = service_name
 
         self.file_path = file_path
+
+        self.node_id = node_id
 
         self.last_position = 0
 
@@ -37,7 +39,7 @@ class LogHandler(FileSystemEventHandler):
 
                         continue
 
-                    event = parse_log(self.service_name,line)
+                    event = parse_log(self.service_name,line, self.node_id)
                     print("QUEUEING EVENT:")
                     print(event)
                     event_queue.put(event)
@@ -57,9 +59,9 @@ class LogHandler(FileSystemEventHandler):
             self.process_new_lines()
 
 # backend_url,api_key
-def start_watcher(service_name,file_path):
+def start_watcher(service_name,file_path, node_id="local-node"):
 
-    handler = LogHandler(service_name,file_path)
+    handler = LogHandler(service_name,file_path, node_id)
 
     observer = Observer()
 

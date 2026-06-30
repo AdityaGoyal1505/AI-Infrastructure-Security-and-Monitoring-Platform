@@ -17,7 +17,7 @@ def generate_root_cause(workspace,node_id):
     health = HealthScore.objects.filter(
         workspace=workspace,
         node_id=node_id
-    ).first()
+    ).order_by("-updated_at").first()
 
     health_score = health.score if health else 100
 
@@ -59,6 +59,18 @@ def generate_root_cause(workspace,node_id):
             )
 
             return latest_rca
+        
+    print(
+
+                f"[RCA] "
+
+                f"Implemented "
+
+                f"{node_id} "
+
+                f"(bucket changed)"
+
+            )
     alerts = list(
 
         Alert.objects.filter(
@@ -89,7 +101,7 @@ def generate_root_cause(workspace,node_id):
         .values("metric_name","observed_value","baseline_value")
     )
 
-    health = HealthScore.objects.filter(workspace=workspace,node_id=node_id).first()
+
 
     context = {
 
@@ -99,11 +111,14 @@ def generate_root_cause(workspace,node_id):
         "correlations":correlations,
         "anomalies":anomalies
     }
-
+    print("Health:", health_score)
+    print("Alerts:", alerts)
+    print("Correlations:", correlations)
+    print("Anomalies:", anomalies)
     prompt = build_root_cause_prompt(context)
 
-    response = ask_openai(prompt)
-
+    response = ask_openai(prompt,json_mode=True)
+    
     data = json.loads(response)
 
     data["bucket"]=current_bucket

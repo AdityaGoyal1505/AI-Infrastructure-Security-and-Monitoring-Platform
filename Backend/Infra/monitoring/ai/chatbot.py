@@ -1,19 +1,12 @@
 # ai_services/chatbot.py
 
 from monitoring.models import (
-
     HealthScore,
-
     Alert,
-
     Anomaly,
-
     RootCauseAnalysis,
-
     Recommendation,
-
     RiskPrediction
-
 )
 
 from .gemini_client import ask_gemini
@@ -21,108 +14,22 @@ from .gemini_client import ask_gemini
 
 def ask_inframind(workspace_id,question):
 
-    health = (
-
-        HealthScore.objects.filter(
-
-            workspace_id=workspace_id
-
-        )
-
-        .order_by("-updated_at")
-
-        .first()
-
-    )
+    health = HealthScore.objects.filter(workspace_id=workspace_id).order_by("-updated_at").first()
 
 
-    alerts = list(
-
-        Alert.objects.filter(
-
-            workspace_id=workspace_id,
-
-            status="OPEN"
-
-        )
-
-        .values_list(
-
-            "title",
-
-            flat=True
-
-        )[:5]
-
-    )
+    alerts = list(Alert.objects.filter(workspace_id=workspace_id,status="OPEN").values_list("title",flat=True)[:5])
 
 
-    anomalies = list(
-
-        Anomaly.objects.filter(
-
-            workspace_id=workspace_id
-
-        )
-
-        .values(
-
-            "metric_name",
-
-            "observed_value"
-
-        )[:5]
-
-    )
+    anomalies = list(Anomaly.objects.filter(workspace_id=workspace_id).values("metric_name","observed_value")[:5])
 
 
-    rca = (
-
-        RootCauseAnalysis.objects.filter(
-
-            workspace_id=workspace_id
-
-        )
-
-        .order_by("-created_at")
-
-        .first()
-
-    )
+    rca = RootCauseAnalysis.objects.filter(workspace_id=workspace_id).order_by("-created_at").first()
 
 
-    recommendations = list(
-
-        Recommendation.objects.filter(
-
-            workspace_id=workspace_id
-
-        )
-
-        .values_list(
-
-            "title",
-
-            flat=True
-
-        )[:5]
-
-    )
+    recommendations = list(Recommendation.objects.filter(workspace_id=workspace_id).values_list("title",flat=True)[:5])
 
 
-    risk = (
-
-        RiskPrediction.objects.filter(
-
-            workspace_id=workspace_id
-
-        )
-
-        .order_by("-created_at")
-
-        .first()
-
-    )
+    risk = RiskPrediction.objects.filter(workspace_id=workspace_id).order_by("-created_at").first()
 
 
     prompt = f"""

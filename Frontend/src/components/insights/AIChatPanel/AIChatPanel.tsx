@@ -37,7 +37,7 @@ const AIChatPanel = () => {
 • Root Cause Analysis
 • Infrastructure Risks
 • Incident Trends
-• Recommendations`,
+• Recommended Actions`,
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -113,7 +113,7 @@ const AIChatPanel = () => {
         </div>
 
         <div className="ai-info">
-          <h1>AI Operations Assistant</h1>
+          <h1>InfraMind Copilot</h1>
 
           <p>Your Infrastructure Intelligence Engine</p>
 

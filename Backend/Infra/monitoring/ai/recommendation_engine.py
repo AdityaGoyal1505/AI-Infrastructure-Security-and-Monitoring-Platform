@@ -3,12 +3,11 @@ import json
 from .openai_client import ask_openai
 from monitoring.models import Recommendation
 
-def generate_recommendations(root_cause,summary):
-
+def generate_recommendations(root_cause, summary):
     prompt = f"""
         You are a Senior Site Reliability Engineer.
 
-        Given the root cause analysis:
+        Analyze the following Root Cause Analysis.
 
         Root Cause:
         {root_cause}
@@ -16,22 +15,26 @@ def generate_recommendations(root_cause,summary):
         Summary:
         {summary}
 
-        Return ONLY JSON.
+        IMPORTANT:
+        Return your response as a valid JSON object only.
+        Do not include markdown.
+        Do not include explanation.
+        Do not wrap it inside ```.
 
-        Format:
+        The JSON schema is:
 
         {{
         "recommendations": [
             {{
-            "title": "...",
-            "description": "...",
+            "title": "string",
+            "description": "string",
             "priority": "LOW|MEDIUM|HIGH|CRITICAL"
             }}
         ]
         }}
-    """
+        """
 
-    response = ask_openai(prompt)
+    response = ask_openai(prompt,json_mode=True)
 
     return json.loads(response)
 

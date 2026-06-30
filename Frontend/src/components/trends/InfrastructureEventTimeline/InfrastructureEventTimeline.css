@@ -1,0 +1,175 @@
+.timeline-card {
+  background: linear-gradient(145deg, #1e1e2d 0%, #151521 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+.timeline-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.timeline-header p {
+  font-size: 0.9rem;
+  color: #94A3B8;
+  margin: 0 0 24px 0;
+}
+
+.timeline-container {
+  position: relative;
+  padding-left: 20px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.timeline-container::-webkit-scrollbar {
+  width: 6px;
+}
+.timeline-container::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+}
+.timeline-container::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  animation: slideInUp 0.3s ease forwards;
+}
+
+.timeline-icon {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #151521;
+  border-radius: 50%;
+}
+
+.timeline-content {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  flex: 1;
+}
+
+.timeline-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.timeline-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.timeline-time {
+  font-size: 0.85rem;
+  color: #94A3B8;
+}
+
+.timeline-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.severity-red {
+  background: rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+}
+
+.severity-orange {
+  background: rgba(249, 115, 22, 0.2);
+  color: #FDBA74;
+}
+
+.severity-yellow {
+  background: rgba(234, 179, 8, 0.2);
+  color: #FDE047;
+}
+
+.severity-green {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86EFAC;
+}
+
+.severity-blue {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93C5FD;
+}
+
+.severity-purple {
+  background: rgba(168, 85, 247, 0.2);
+  color: #D8B4FE;
+}
+
+.severity-default {
+  background: rgba(255, 255, 255, 0.1);
+  color: #E2E8F0;
+}
+
+.timeline-details {
+  font-size: 0.9rem;
+  color: #CBD5E1;
+}
+
+.timeline-description {
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.timeline-meta {
+  font-size: 0.8rem;
+  color: #94A3B8;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

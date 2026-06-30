@@ -115,7 +115,7 @@ const Home = () => {
           <div className="feature-card">
             <div className="feature-icon">🧠</div>
 
-            <h3>AI Intelligence</h3>
+            <h3>AI Analysis</h3>
 
             <p>Advanced AI powered infrastructure insights.</p>
 
@@ -126,7 +126,7 @@ const Home = () => {
 
               <li>Risk Prediction</li>
 
-              <li>Recommendations</li>
+              <li>Recommended Actions</li>
             </ul>
           </div>
 

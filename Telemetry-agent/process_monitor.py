@@ -3,7 +3,7 @@ import psutil
 from datetime import datetime
 
 
-def collect_process_metrics():
+def collect_process_metrics(node_id="local-node"):
 
     process_count = len(list(psutil.process_iter()))
 
@@ -23,7 +23,7 @@ def collect_process_metrics():
 
     return {
 
-        "node_id": "local-node",
+        "node_id": node_id,
 
         "source_service": ("process-monitor"),
 

@@ -19,7 +19,7 @@ const Header = () => {
     }
 
     if (location.pathname.includes("/insights")) {
-      return "AI Insights";
+      return "AI Analysis";
     }
 
     if (location.pathname.includes("/predictions")) {
@@ -31,7 +31,7 @@ const Header = () => {
     }
 
     if (location.pathname.includes("/setup")) {
-      return "Setup";
+      return "Configuration";
     }
 
     return "";
@@ -68,6 +68,8 @@ const Header = () => {
       navigate(`/workspaces/${id}/trends`);
     } else if (
       query.includes("setup") ||
+      query.includes("config") ||
+      query.includes("configuration") ||
       query.includes("agent") ||
       query.includes("delete")
     ) {
