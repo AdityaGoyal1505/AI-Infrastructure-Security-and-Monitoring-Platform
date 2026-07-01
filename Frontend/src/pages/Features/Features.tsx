@@ -188,10 +188,10 @@ const Features = () => {
       </section>
 
       {/* AI RECOMMENDED ACTIONS */}
-      <section className="feature-section">
+      <section className="feature-row reverse">
         <div className="feature-text">
-          <span className="feature-badge">ACTION</span>
-          <h2>AI Recommended Actions</h2>
+          <span className="feature-badge">🤖</span>
+          <h2>AI Recommendation System</h2>
 
           <p>
             Actionable insights generated automatically to resolve incidents

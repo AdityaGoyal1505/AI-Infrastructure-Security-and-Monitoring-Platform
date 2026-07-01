@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, LogIn } from "lucide-react";
 
 const PublicHeader = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const PublicHeader = () => {
   const logout = () => {
     localStorage.clear();
 
-    navigate("/auth");
+    navigate("/home");
   };
 
   const isAuthenticated = !!localStorage.getItem("access_token");
@@ -74,7 +74,8 @@ const PublicHeader = () => {
             )}
           </>
         ) : (
-          <button className="cta-btn" onClick={() => navigate("/auth")} style={{ padding: "8px 16px", borderRadius: "6px", border: "none", background: "var(--primary-color, #007bff)", color: "#fff", cursor: "pointer", fontWeight: "bold" }}>
+          <button className="login-btn" onClick={() => navigate("/auth")}>
+            <LogIn size={18} style={{ marginRight: "6px" }} />
             Login
           </button>
         )}

@@ -3,6 +3,7 @@ import usePredictions from "../../hooks/usePredictions";
 import PredictionStats from "../../components/predictions/PredictionStats/PredictionStats";
 import PredictionHistory from "../../components/predictions/PredictionHistory/PredictionHistory";
 import PredictionForecastChart from "../../components/predictions/PredictionForecastChart/PredictionForecastChart";
+import ReactMarkdown from "react-markdown";
 
 const Predictions = () => {
   const { data, loading, error, highestRisk, highRiskNodes } = usePredictions();
@@ -71,7 +72,7 @@ const Predictions = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginTop: '20px' }}>
           <div className="ai-explanation-card" style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px' }}>
             <h3 style={{ color: '#fff', marginBottom: '15px' }}>AI Explanation</h3>
-            <p style={{ color: '#ddd', lineHeight: '1.6' }}>{highestRisk.explanation}</p>
+            <ReactMarkdown children={highestRisk.explanation} />
           </div>
           
           <div className="confidence-card" style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px' }}>

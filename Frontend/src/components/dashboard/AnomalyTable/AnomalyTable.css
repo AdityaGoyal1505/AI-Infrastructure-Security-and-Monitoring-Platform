@@ -55,6 +55,14 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.anomaly-description {
+  margin: 0 0 22px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
 .anomaly-table td {
   padding: 20px 18px;
 

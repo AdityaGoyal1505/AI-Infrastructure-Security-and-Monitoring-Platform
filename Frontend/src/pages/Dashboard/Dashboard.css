@@ -1,49 +1,33 @@
 .dashboard {
   display: flex;
-
   flex-direction: column;
-
-  gap: 28px;
-
-  padding: 32px;
-
-  min-height: 100%;
+  gap: 12px;
+  padding: 16px;
+  min-height: 100vh;
 }
 
 .stats-grid {
   display: grid;
-
-  grid-template-columns: repeat(4, 1fr);
-
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .ai-grid {
   display: grid;
-
-  grid-template-columns:
-    1.4fr
-    1fr;
-
-  gap: 24px;
-
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
   align-items: start;
 }
 
 .dashboard-loading,
 .dashboard-error {
   height: 60vh;
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   font-size: 20px;
-
   font-weight: 600;
-
   color: #94a3b8;
 }
 

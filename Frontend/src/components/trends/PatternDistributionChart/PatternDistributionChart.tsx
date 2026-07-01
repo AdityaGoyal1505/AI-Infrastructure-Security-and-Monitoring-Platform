@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -15,6 +15,8 @@ interface Props {
 }
 
 const PatternDistributionChart = ({ distribution }: Props) => {
+  // Compute total count for percentage calculations
+  const total = useMemo(() => distribution.reduce((sum, d) => sum + d.count, 0), [distribution]);
   if (!distribution || distribution.length === 0) return null;
 
   return (
@@ -35,6 +37,7 @@ const PatternDistributionChart = ({ distribution }: Props) => {
             />
             <YAxis stroke="#94A3B8" />
             <Tooltip
+              content={<CustomTooltip total={total} />}
               contentStyle={{
                 background: "#0F172A",
                 border: "1px solid rgba(139,92,246,0.2)",
@@ -60,6 +63,20 @@ const PatternDistributionChart = ({ distribution }: Props) => {
       </div>
     </div>
   );
+};
+
+const CustomTooltip = ({ active, payload, label, total }) => {
+  if (active && payload && payload.length) {
+    const count = payload[0].value;
+    const percentage = total ? ((count / total) * 100).toFixed(1) : null;
+    return (
+      <div className="custom-tooltip" style={{ background: "#0F172A", padding: "8px 12px", borderRadius: "8px", color: "#F8FAFC" }}>
+        <p style={{ margin: 0 }}><strong>{label}</strong></p>
+        <p style={{ margin: 0 }}>{count} occurrences{percentage ? ` (${percentage}%)` : ""}</p>
+      </div>
+    );
+  }
+  return null;
 };
 
 export default PatternDistributionChart;

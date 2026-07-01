@@ -112,7 +112,8 @@
   flex: 1;
 }
 
-.feature-emoji {
+.feature-emoji,
+.feature-badge {
   width: 58px;
 
   height: 58px;

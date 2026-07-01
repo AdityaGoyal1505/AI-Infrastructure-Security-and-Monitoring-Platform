@@ -125,8 +125,6 @@ const Header = () => {
         <button className="icon-btn" onClick={() => navigate("/profile")}>
           <FiSettings />
         </button>
-
-        <div className="avatar">G</div>
       </div>
     </header>
   );

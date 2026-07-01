@@ -20,7 +20,7 @@ const Profile = () => {
   const logout = () => {
     localStorage.clear();
 
-    navigate("/login");
+    navigate("/home");
   };
 
   return (

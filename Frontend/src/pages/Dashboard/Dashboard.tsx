@@ -51,7 +51,7 @@ const Dashboard = () => {
           summary={data?.latest_rca?.summary}
           confidence={data?.latest_rca?.confidence}
         />
-        <RecommendationList recommendations={data?.recommendations ?? []} />
+        <RecommendationList recommendations={data?.recommendations ?? []}/>
       </div>
       <AnomalyTable anomalies={data?.recent_anomalies ?? []} />
     </div>

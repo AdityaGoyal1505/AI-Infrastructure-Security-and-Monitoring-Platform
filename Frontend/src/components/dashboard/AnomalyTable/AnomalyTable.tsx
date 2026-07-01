@@ -22,6 +22,9 @@ const AnomalyTable = ({ anomalies }: Props) => {
   return (
     <div className="anomaly-card">
       <div className="anomaly-header">Recent Anomalies</div>
+      <p className="anomaly-description">
+        Observed is the actual metric value when the anomaly was detected. Baseline is the expected normal value for that metric. Score indicates how strongly the value deviates from normal behavior.
+      </p>
 
       {anomalies.length === 0 ? (
         <div className="empty-table">No anomalies detected</div>

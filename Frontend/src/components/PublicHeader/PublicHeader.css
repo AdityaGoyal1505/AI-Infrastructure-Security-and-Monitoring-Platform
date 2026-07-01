@@ -173,3 +173,29 @@
 .user-dropdown button:hover {
   background: rgba(255, 255, 255, 0.05);
 }
+
+.login-btn{
+  height: 50px;
+
+  padding: 0 20px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(255, 255, 255, 0.03);
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}

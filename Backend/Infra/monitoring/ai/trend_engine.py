@@ -64,7 +64,7 @@ def generate_rca_trends():
 
         RCAInsight.objects.create(
 
-            workspace=first_analysis,
+            workspace=first_analysis.workspace,
 
             insight_type="COMMON_ROOT_CAUSE",
 
