@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { askAI } from "../../../api/aiApi";
 import {
   Activity,
@@ -8,13 +8,6 @@ import {
   ShieldAlert,
   Sparkles,
 } from "lucide-react";
-import {
-
-  useRef,
-
-  useEffect
-
-} from "react";
 import "./AIChatPanel.css";
 import { useWorkspace } from "../../../context/WorkspaceContext";
 const suggestions = [

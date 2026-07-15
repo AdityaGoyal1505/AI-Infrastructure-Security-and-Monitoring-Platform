@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -12,6 +12,13 @@ import "./PatternDistributionChart.css";
 
 interface Props {
   distribution: { pattern: string; count: number }[];
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ value: number }>;
+  label?: string | number;
+  total: number;
 }
 
 const PatternDistributionChart = ({ distribution }: Props) => {
@@ -65,7 +72,7 @@ const PatternDistributionChart = ({ distribution }: Props) => {
   );
 };
 
-const CustomTooltip = ({ active, payload, label, total }) => {
+const CustomTooltip = ({ active, payload, label, total }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const count = payload[0].value;
     const percentage = total ? ((count / total) * 100).toFixed(1) : null;

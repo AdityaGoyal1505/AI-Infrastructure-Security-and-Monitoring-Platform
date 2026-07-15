@@ -1,5 +1,5 @@
 import Navbar from "../components/layout/Navbar.tsx";
-import Sidebar from "../components/layout/Sidebar.tsx";
+import Sidebar from "../components/layout/Sidebar/Sidebar.tsx";
 
 interface Props {
   children: React.ReactNode;

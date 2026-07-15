@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 
@@ -74,13 +74,12 @@ const useTrends = () => {
     legacyData.push(
       ...trendData.charts.health_score.map((hs) => ({
         id: 0,
-        workspace: workspace.id,
+        workspace: workspace.id ?? 0,
         insight_type: "health_score",
         title: "Health Score",
         description: "",
         occurrence_count: hs.score,
         created_at: hs.timestamp,
-        analytics: undefined,
       }))
     );
   }

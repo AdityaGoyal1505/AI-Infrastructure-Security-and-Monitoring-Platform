@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import {
   BarChart,
   Bar,
@@ -16,7 +16,7 @@ interface Props {
   data: any[];
 }
 
-const CustomTooltip = ({ active, payload, label, chartType }: any) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div style={{ backgroundColor: '#1e1e2d', border: '1px solid #333', padding: '10px', color: '#fff', borderRadius: '8px' }}>

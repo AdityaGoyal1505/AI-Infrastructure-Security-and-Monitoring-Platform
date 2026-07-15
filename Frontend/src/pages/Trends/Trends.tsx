@@ -1,4 +1,3 @@
-import React from "react";
 import "./Trends.css";
 import useTrends from "../../hooks/useTrends";
 import ExecutiveSummary from "../../components/trends/ExecutiveSummary/ExecutiveSummary";
@@ -31,7 +30,7 @@ const Trends = () => {
 
       {charts && (
         singleNode ? (
-          <TrendAnalyticsChart chartType="health" data={charts.health_score || charts.health_score_trend || []} />
+          <TrendAnalyticsChart chartType="health" data={charts.health_score || []} />
         ) : (
           <TrendAnalyticsChart chartType="nodes" data={charts.top_affected_nodes || charts.anomalies || []} />
         )
